@@ -2,6 +2,30 @@
 #include "src/blockchain.h"
 //#include "hash_function.h"
 
+void displayChain(Blockchain* blockchain)  {
+
+    Blockchain::iterator ite = blockchain->begin();
+
+    for(; ite != blockchain->end(); ++ite){
+        cout << "Index: " << (*ite)->getIndex() << endl;
+        cout << "Transactions: " << endl;
+        for (const Transaction& transaction : (*ite)->getData()) {
+            cout << "  ID Transaccion: " << transaction.idTransaccion << endl;
+            cout << "  Nombre 1: " << transaction.nombreOrigen << endl;
+            cout << "  Nombre 2: " << transaction.nombreDestino << endl;
+            cout << "  Importe: " << transaction.importe << endl;
+            cout << "  Fecha: " << transaction.fecha << endl;
+            cout << endl;
+        }
+        
+        cout << "Previous Hash: " << (*ite)->getPreviousHash() << endl;
+        cout << "Hash: " << (*ite)->getHash() << endl;
+        cout << endl;
+    }
+    
+}
+
+
 int main() {
     Blockchain blockchain;
 
@@ -14,11 +38,14 @@ int main() {
     transactions2.push_back({3, "Alice", "Bob", 200.0, "2023-05-24"});
     blockchain.addBlock(transactions2);
 
-    blockchain.displayChain();
+    displayChain(&blockchain);
 
     bool isvalid = blockchain.validateChain();
+   
     cout<< isvalid << endl;
 }
+
+
 
 
 /*

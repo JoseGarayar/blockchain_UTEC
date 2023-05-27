@@ -12,6 +12,8 @@ private:
     unordered_map<int, Block*> index;
 
 public:
+    typedef CircularDoubleListIterator<Block*> iterator;
+
     Blockchain() {
         Block* initialBlock = new Block(0, vector<Transaction>(), "0");
         blockchain.push_back(initialBlock);
@@ -79,6 +81,14 @@ public:
         }
 
     }
+
+    iterator begin(){
+        return blockchain.begin();      
+    }
+
+    iterator end(){
+        return blockchain.end();
+    }   
 
     ~Blockchain() {
         blockchain.clear();

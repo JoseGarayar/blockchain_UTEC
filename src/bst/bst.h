@@ -96,6 +96,19 @@ class BSTree {
                 root = _buildFromOrderedArray(array,0,n-1);
         }//dado un array ordenado construir un arbol binario balanceado
 
+               vector<T> findRange(T valueStart, T valueEnd){// Recorrido en anchura (BreadthFirstSearch)
+
+            vector<T> result;
+            if (root == nullptr) {
+                return result;
+            }
+            _findRange(root, valueStart, valueEnd, result);
+            
+            return result;
+        }
+
+
+
         string displayBFS(){// Recorrido en anchura (BreadthFirstSearch)
 
             if (root == nullptr) {
@@ -323,6 +336,21 @@ class BSTree {
                 ss << nodo->data << " ";
                 _displayDFS(nodo->left, ss);
                 _displayDFS(nodo->right, ss);
+            }
+        }
+
+        void _findRange(NodeBT<T>* node,T valueStart, T valueEnd, vector<T> &result){
+            if (node ==nullptr) return;
+
+            if (valueStart < node->data  ) {
+                _findRange (node->left, valueStart, valueEnd,result);
+            }
+            ///argrega valor
+            if (valueStart <= node->data && valueEnd >= node->data){
+                result.push_back(node->data);
+            }
+            if (valueEnd > node->data ) {
+             _findRange (node->right, valueStart, valueEnd,result);
             }
         }
 
