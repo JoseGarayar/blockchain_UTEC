@@ -16,6 +16,8 @@ int main() {
 
     blockchain.displayChain();
 
+    bool isvalid = blockchain.validateChain();
+    cout<< isvalid << endl;
 }
 
 

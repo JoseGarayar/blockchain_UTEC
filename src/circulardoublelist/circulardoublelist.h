@@ -2,6 +2,9 @@
 #define DOUBLYLIST_H
 #include "iteratorcirculardouble.h"
 
+using namespace std;
+
+
 template <typename T>
 class CircularDoubleList{
    
@@ -31,12 +34,12 @@ public:
 
     T front(){
         if (empty()) throw out_of_range("Array is empty");
-        return head->next->value;
+        return head->next->data;
     }
 
     T back(){
         if (empty()) throw out_of_range("Array is empty");
-        return head->prev->value;
+        return head->prev->data;
     }
 
     void push_front(T data){

@@ -87,8 +87,7 @@ public:
         return hashStream.str();
     }
 
-    bool proofOfWork(){
-
+    bool isValid(){
         return (this->hash==mineBlock());
     }
 

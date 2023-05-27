@@ -1,24 +1,30 @@
 #include "block.h"
 #include <list>
 #include <unordered_map>
+#include "circulardoublelist/circulardoublelist.h"
 
+using namespace std;
 
 class Blockchain {
 private:
-    std::list<Block> chain;
-    std::unordered_map<int, Block*> index;
+    
+    CircularDoubleList<Block*> blockchain;
+    unordered_map<int, Block*> index;
 
 public:
     Blockchain() {
-        Block genesisBlock(0, std::vector<Transaction>(), "0");
-        chain.push_back(genesisBlock);
+        Block* initialBlock = new Block(0, vector<Transaction>(), "0");
+        blockchain.push_back(initialBlock);
+        
     }
 
-    void addBlock(const std::vector<Transaction>& data) {
-        int index = chain.size();
-        const std::string& previousHash = chain.back().getHash();
+    void addBlock(const vector<Transaction>& data) {
+        int index = blockchain.size();
+        
+        const string& previousHash = blockchain.back()->getHash();
         Block* newBlock = new Block(index, data, previousHash);
-        chain.push_back(*newBlock);
+        blockchain.push_back(newBlock);
+        
 
        /* for (const Transaction& transaction : data) {
             index[transaction.idTransaccion] = newBlock;
@@ -27,29 +33,19 @@ public:
         
     }
 
-    bool validateChain() const {
+    bool validateChain()  {
         
-        /*auto it = std::next(chain.begin());
-        auto prevIt = chain.begin();
+        CircularDoubleList<Block*>::iterator ite = blockchain.begin();
 
-        while (it != chain.end()) {
-            const Block& currentBlock = *it;
-            const Block& previousBlock = *prevIt;
-
-            if (currentBlock.proofOfWork()) return false;
-
-            if (currentBlock.getHash() != currentBlock.calculateHash(currentBlock.getData(), currentBlock.getPreviousHash(),  currentBlock.getnonce())) {
-                return false;
-            }
-
-            if (currentBlock.getPreviousHash() != previousBlock.getHash()) {
-                return false;
-            }
-
-            ++it;
-            ++prevIt;
+        Block*  previousBlock = *ite;
+        ++ite;
+        for(; ite != blockchain.end(); ++ite){
+            Block* currentBlock = *ite;
+            if (!currentBlock->isValid()) return false;
+            if (currentBlock->getPreviousHash() != previousBlock->getHash()) return false;
+            previousBlock = *ite;
         }
-            */
+        
         return true;
     }
 
@@ -61,29 +57,34 @@ public:
         return nullptr;
     }
 
-    void displayChain() const {
-        for (const Block& block : chain) {
-            std::cout << "Index: " << block.getIndex() << std::endl;
-            std::cout << "Transactions: " << std::endl;
-            for (const Transaction& transaction : block.getData()) {
-                std::cout << "  ID Transaccion: " << transaction.idTransaccion << std::endl;
-                std::cout << "  Nombre 1: " << transaction.nombreOrigen << std::endl;
-                std::cout << "  Nombre 2: " << transaction.nombreDestino << std::endl;
-                std::cout << "  Importe: " << transaction.importe << std::endl;
-                std::cout << "  Fecha: " << transaction.fecha << std::endl;
-                std::cout << std::endl;
+    void displayChain()  {
+
+        CircularDoubleList<Block*>::iterator ite = blockchain.begin();
+
+        for(; ite != blockchain.end(); ++ite){
+            cout << "Index: " << (*ite)->getIndex() << endl;
+            cout << "Transactions: " << endl;
+            for (const Transaction& transaction : (*ite)->getData()) {
+                cout << "  ID Transaccion: " << transaction.idTransaccion << endl;
+                cout << "  Nombre 1: " << transaction.nombreOrigen << endl;
+                cout << "  Nombre 2: " << transaction.nombreDestino << endl;
+                cout << "  Importe: " << transaction.importe << endl;
+                cout << "  Fecha: " << transaction.fecha << endl;
+                cout << endl;
             }
             
-            std::cout << "Previous Hash: " << block.getPreviousHash() << std::endl;
-            std::cout << "Hash: " << block.getHash() << std::endl;
-            std::cout << std::endl;
+            cout << "Previous Hash: " << (*ite)->getPreviousHash() << endl;
+            cout << "Hash: " << (*ite)->getHash() << endl;
+            cout << endl;
         }
+
     }
 
     ~Blockchain() {
-        for (auto& pair : index) {
+        blockchain.clear();
+        /*for (auto& pair : index) {
             delete pair.second;
-        }
+        }*/
     }
     
 };
