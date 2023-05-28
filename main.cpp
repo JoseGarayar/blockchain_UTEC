@@ -31,11 +31,12 @@ int main() {
 
     std::vector<Transaction> transactions1;
     transactions1.push_back({1, "John", "Alice", 100.0, "2023-05-22"});
-    transactions1.push_back({2, "Bob", "Carol", 50.0, "2023-05-23"});
+    transactions1.push_back({2, "Jose", "Carol", 50.0, "2023-05-23"});
     blockchain.addBlock(transactions1);
 
     std::vector<Transaction> transactions2;
-    transactions2.push_back({3, "Alice", "Bob", 200.0, "2023-05-24"});
+    transactions2.push_back({4, "Jose", "Alice", 120.0, "2023-05-24"});
+    transactions2.push_back({5, "Alice", "Bob", 100.0, "2023-05-24"});
     blockchain.addBlock(transactions2);
 
     displayChain(&blockchain);
@@ -43,6 +44,42 @@ int main() {
     bool isvalid = blockchain.validateChain();
    
     cout<< isvalid << endl;
+
+    cout<< "Busqueda por Rango" << endl;
+
+    vector<Transaction> vec =  blockchain.findTransactionsByRangeof(100,120);
+    for(auto ele : vec) {        
+            cout << "  ID Transaccion: " << ele.idTransaccion << endl;
+            cout << "  Nombre 1: " << ele.nombreOrigen << endl;
+            cout << "  Nombre 2: " << ele.nombreDestino << endl;
+            cout << "  Importe: " << ele.importe << endl;
+            cout << "  Fecha: " << ele.fecha << endl;
+            cout << endl;                   
+    }
+
+    cout<< "Busqueda por Nombre Emisor" << endl;
+
+    vec =  blockchain.findTransactionsByFromName("Jose"); 
+    for(auto ele : vec) {        
+            cout << "  ID Transaccion: " << ele.idTransaccion << endl;
+            cout << "  Nombre 1: " << ele.nombreOrigen << endl;
+            cout << "  Nombre 2: " << ele.nombreDestino << endl;
+            cout << "  Importe: " << ele.importe << endl;
+            cout << "  Fecha: " << ele.fecha << endl;
+            cout << endl;                   
+    }
+
+    cout<< "Busqueda por Nombre Receptor" << endl;
+    vec =  blockchain.findTransactionsByToName("Alice"); 
+    for(auto ele : vec) {        
+            cout << "  ID Transaccion: " << ele.idTransaccion << endl;
+            cout << "  Nombre 1: " << ele.nombreOrigen << endl;
+            cout << "  Nombre 2: " << ele.nombreDestino << endl;
+            cout << "  Importe: " << ele.importe << endl;
+            cout << "  Fecha: " << ele.fecha << endl;
+            cout << endl;                   
+    }
+
 }
 
 

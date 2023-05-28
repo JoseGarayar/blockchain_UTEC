@@ -2,6 +2,7 @@
 #include <list>
 #include <unordered_map>
 #include "circulardoublelist/circulardoublelist.h"
+#include "bst/bst.h"
 
 using namespace std;
 
@@ -10,6 +11,12 @@ private:
     
     CircularDoubleList<Block*> blockchain;
     unordered_map<int, Block*> index;
+    //indice BST para los importes
+    BSTree<double, Transaction*> *bstreeAmount = new BSTree<double, Transaction*>();
+    //indice BST para los NombreEmisor
+    BSTree<string, Transaction*> *bstreeFromName = new BSTree<string, Transaction*>();
+    //indice BST para los nombrereceptor
+    BSTree<string, Transaction*> *bstreeToName = new BSTree<string, Transaction*>();
 
 public:
     typedef CircularDoubleListIterator<Block*> iterator;
@@ -20,7 +27,7 @@ public:
         
     }
 
-    void addBlock(const vector<Transaction>& data) {
+    void addBlock(vector<Transaction>& data) {
         int index = blockchain.size();
         
         const string& previousHash = blockchain.back()->getHash();
@@ -32,6 +39,12 @@ public:
             index[transaction.idTransaccion] = newBlock;
         }*/
 
+        // agrega los datos al indice BST
+        for ( Transaction& transaction : data) {
+            bstreeAmount->insert (transaction.importe, &transaction);
+            bstreeFromName->insert (transaction.nombreOrigen, &transaction);
+            bstreeToName->insert (transaction.nombreDestino, &transaction);
+        }
         
     }
 
@@ -58,6 +71,38 @@ public:
         }
         return nullptr;
     }
+
+    vector<Transaction> findTransactionsByRangeof(double amountIni, double amountEnd){
+
+        vector<Transaction> result;
+        vector<pair<double, Transaction*>> arr = bstreeAmount->findRange(amountIni,amountEnd);
+        for(auto ele : arr) {        
+            result.push_back( *ele.second);                    
+        }
+        return result;
+    }
+
+    vector<Transaction> findTransactionsByFromName(string name){
+
+        vector<Transaction> result;
+        vector<pair<string, Transaction*>> arr = bstreeFromName->findKey(name);
+        for(auto ele : arr) {        
+            result.push_back( *ele.second);                    
+        }
+        return result;
+    }
+
+    vector<Transaction> findTransactionsByToName(string name){
+
+        vector<Transaction> result;
+        vector<pair<string, Transaction*>> arr = bstreeToName->findKey(name);
+        for(auto ele : arr) {        
+            result.push_back( *ele.second);                    
+        }
+        return result;
+    }
+
+
 
     void displayChain()  {
 

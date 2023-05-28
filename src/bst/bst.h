@@ -6,22 +6,22 @@
 
 using namespace std;
 
-template <typename T>
+template<typename TK, typename TV>
 class BSTree {
     public:
-        typedef BSTIterator<T> iterator;  
+        typedef BSTIterator<TK, TV> iterator;  
 
     private:
-        NodeBT<T>* root;    
+        NodeBT<TK, TV>* root;    
 
     public:
         BSTree(): root(nullptr) {}
 
-		void insert(T value){
-            _insert(value, root);
+		void insert(TK key, TV value){
+            _insert(key, value, root);
         }	
-		bool find(T value){
-            return _find(root, value) != nullptr ? true : false;
+		bool find(TK key){
+            return _find(root, key) != nullptr ? true : false;
         }
 
         string displayInOrder(){
@@ -46,17 +46,17 @@ class BSTree {
             return _height(root);
         }
 
-        T minValue(){
+        TK minValue(){
             if (root == nullptr) throw out_of_range("BST is empty");
-            return _findMin(root)->data; 
+            return _findMin(root)->key; 
         }
 
-        T maxValue(){
+        TK maxValue(){
             if (root == nullptr) throw out_of_range("BST is empty");
-            return _findMax(root)->data; 
+            return _findMax(root)->key; 
         }
 
-        void remove(T value){
+        void remove(TK value){
             if (root == nullptr) throw out_of_range("BST is empty");
             _remove(root, value);
         }       
@@ -76,14 +76,14 @@ class BSTree {
             return _isfull(root);
         } //es aquel en el que todos los nodos tienen 0 o 2 hijos  
 
-        T successor(T value){
+        TK successor(TK value){
             if (root == nullptr) throw out_of_range("BST is empty");
-            return _successor(root, nullptr, value)->data;
+            return _successor(root, nullptr, value)->key;
         } // Retornar el valor siguiente de "value" en el arbol
 
-        T predecessor(T value){
+        TK predecessor(TK value){
             if (root == nullptr) throw out_of_range("BST is empty");
-            return _predecessor(root, nullptr, value)->data;
+            return _predecessor(root, nullptr, value)->key;
         } // Retornar el valor anterior de "value" en el arbol
 
 
@@ -92,13 +92,14 @@ class BSTree {
                 _KillSelf(root);
         } // Liberar todos los nodos (usar root->KillSelf)
 
-        void buildFromOrderedArray(T *array, int n){
+        void buildFromOrderedArray(TK *array, int n){
                 root = _buildFromOrderedArray(array,0,n-1);
         }//dado un array ordenado construir un arbol binario balanceado
 
-               vector<T> findRange(T valueStart, T valueEnd){// Recorrido en anchura (BreadthFirstSearch)
 
-            vector<T> result;
+        vector<pair<TK, TV>> findRange(TK valueStart, TK valueEnd){// Recorrido en anchura (BreadthFirstSearch)
+
+            vector<pair<TK, TV>> result;
             if (root == nullptr) {
                 return result;
             }
@@ -107,8 +108,13 @@ class BSTree {
             return result;
         }
 
+        vector<pair<TK, TV>> findKey(TK key){
+            vector<pair<TK, TV>> result;
 
-
+            _findKey(root, key, result) ;
+            return result;
+        }
+        
         string displayBFS(){// Recorrido en anchura (BreadthFirstSearch)
 
             if (root == nullptr) {
@@ -116,12 +122,12 @@ class BSTree {
             }
 
             stringstream ss;
-            queue<NodeBT<T>*> q;
+            queue<NodeBT<TK, TV>*> q;
             q.push(root);
 
             while (!q.empty()) {
-                NodeBT<T>* current = q.front();
-                ss << current->data << " ";
+                NodeBT<TK, TV>* current = q.front();
+                ss << current->key << " ";
                 q.pop();
 
                 if (current->left != nullptr) {
@@ -159,11 +165,11 @@ class BSTree {
     
     private:
 
-        void _KillSelf(NodeBT<T>* &node){
+        void _KillSelf(NodeBT<TK,TV>* &node){
             if (node !=nullptr){
                 _KillSelf(node->left);
                 _KillSelf(node->right);
-                NodeBT<T>* nodetmp = node; //nodo a eliminar                
+                NodeBT<TK, TV>* nodetmp = node; //nodo a eliminar                
                 node=nullptr;
                 nodetmp->left =nullptr;
                 nodetmp->right =nullptr;
@@ -171,69 +177,69 @@ class BSTree {
             }
         } 
 
-        void _insert(T value,NodeBT<T>* &node){
-            if (node==nullptr) node = new NodeBT<T>(value);                                
-            else if (value < node->data) _insert(value, node->left);
-            else _insert(value, node->right);
+        void _insert(TK key, TV value,NodeBT<TK,TV>* &node){
+            if (node==nullptr) node = new NodeBT<TK,TV>(key,value);                                
+            else if (key < node->key) _insert(key, value, node->left);
+            else _insert(key,value, node->right);
         }
 
-        void _displayInOrder(NodeBT<T>* node, stringstream & ss){
+        void _displayInOrder(NodeBT<TK,TV>* node, stringstream & ss){
 
             if (node != nullptr) {
                 _displayInOrder(node->left, ss);
-                ss << node->data << " ";
+                ss << node->key << " ";
                 _displayInOrder(node->right, ss);
             }
 
         }
 
-        void _displayPreOrder(NodeBT<T>* node, stringstream & ss){
+        void _displayPreOrder(NodeBT<TK,TV>* node, stringstream & ss){
 
             if (node != nullptr) {
-                ss << node->data << " ";
+                ss << node->key << " ";
                 _displayInOrder(node->left, ss);                
                 _displayInOrder(node->right, ss);
             }
         }
 
 
-        void _displayPostOrder(NodeBT<T>* node, stringstream & ss){
+        void _displayPostOrder(NodeBT<TK,TV>* node, stringstream & ss){
 
             if (node != nullptr) {
                 
                 _displayInOrder(node->left, ss);                
                 _displayInOrder(node->right, ss);
-                ss << node->data << " ";
+                ss << node->key << " ";
             }
         }
 
-        NodeBT<T>* _findMin(NodeBT<T>* node) {
+        NodeBT<TK,TV>* _findMin(NodeBT<TK,TV>* node) {
             while (node->left!=nullptr){
                 node = node->left;
             }                
             return node;                        
         }
 
-        NodeBT<T>* _findMax(NodeBT<T>* node) {
+        NodeBT<TK,TV>* _findMax(NodeBT<TK,TV>* node) {
             while (node->right!=nullptr){
                 node = node->right;
             }                
             return node;                        
         }
 
-        NodeBT<T>* _find(NodeBT<T>* node, T value){
-            if (node== nullptr || value == node->data) return node;
-            if (value < node->data) return _find(node->left, value);
-            else return _find(node->right, value);            
+        NodeBT<TK,TV>* _find(NodeBT<TK, TV>* node, TK key){
+            if (node== nullptr || key == node->key) return node;
+            if (key < node->key) return _find(node->left, key);
+            else return _find(node->right, key);            
         }
 
-        int _height(NodeBT<T>* node)
+        int _height(NodeBT<TK, TV>* node)
         {
             if (node == nullptr || (node->left==nullptr && node->right==nullptr)) return 0;            
             return 1+ max(_height(node->left), _height(node->right));
         }
 
-        bool _isBalanced(NodeBT<T>* node){
+        bool _isBalanced(NodeBT<TK, TV>* node){
             
             if (node == nullptr) return true;
 
@@ -246,24 +252,24 @@ class BSTree {
         
         }
 
-        void _remove(NodeBT<T>* &node,T value){
+        void _remove(NodeBT<TK, TV>* &node,TK key){
 
             if ( node == nullptr) return;
 
-            if ( value < node->data ) _remove(node->left, value);
-            else if ( value > node->data ) _remove(node->right, value);
+            if ( key < node->key ) _remove(node->left, key);
+            else if ( key > node->key ) _remove(node->right, key);
             else if (node->left !=nullptr && node->right!=nullptr){
-                node->data = _findMin(node->right)->data;
-                _remove (node->right, node->data);
+                node->key = _findMin(node->right)->key;
+                _remove (node->right, node->key);
             }
             else{
-                NodeBT<T>* nodetmp = node; //nodo a eliminar
+                NodeBT<TK, TV>* nodetmp = node; //nodo a eliminar
                 node = node->left!=nullptr ? node->left : node->right;
                 delete nodetmp;
             }
         }
 
-        bool _isfull(NodeBT<T>* node){
+        bool _isfull(NodeBT<TK,TV>* node){
             
             if (node==nullptr) return true;
             if (node->left == nullptr && node->right == nullptr){
@@ -276,54 +282,55 @@ class BSTree {
 
         }
 
-        int _size(NodeBT<T>* node){
+        int _size(NodeBT<TK,TV>* node){
             if (node == nullptr)
                 return 0;
             else
                 return (_size(node->left)+1+_size(node->right));
         }
 
-        NodeBT<T>* _successor(NodeBT<T>* node, NodeBT<T>* succ,T value){
+        NodeBT<TK,TV>* _successor(NodeBT<TK,TV>* node, NodeBT<TK,TV>* succ,TK key){
 
             if (node == nullptr) return succ;
-            if (node->data == value){
+            if (node->key == key){
                 if (node->right!=nullptr) return _findMin(node->right);
             }
-            else if (node->data < value){ //si esta value y su sucesor a la derecha
-                return _successor(node->right, succ, value);
+            else if (node->key < key){ //si esta value y su sucesor a la derecha
+                return _successor(node->right, succ, key);
             }
             else { //si esta value y su sucesor a la izquierda voy guardando el padre en succesor
                 succ = node;
-                return _successor(node->left, succ, value);
+                return _successor(node->left, succ, key);
             }
             return succ;
 
         }
 
-        NodeBT<T>* _predecessor(NodeBT<T>* node, NodeBT<T>* prede,T value){
+        NodeBT<TK,TV>* _predecessor(NodeBT<TK,TV>* node, NodeBT<TK,TV>* prede,TK key){
 
             if (node == nullptr) return prede;
-            if (node->data == value){
+            if (node->key == key){
                 if (node->left!=nullptr) return _findMax(node->left);
             }
-            else if (node->data < value){ //si esta value y su predecessor a la derecha voy guardando el padre en predecessor
+            else if (node->key < key){ //si esta value y su predecessor a la derecha voy guardando el padre en predecessor
                 prede = node;
-                return _predecessor(node->right, prede, value);
+                return _predecessor(node->right, prede, key);
             }
             else { //si esta value y su predecessor a la izquierda                 
-                return _predecessor(node->left, prede, value);
+                return _predecessor(node->left, prede, key);
             }
             return prede;
 
         }
 
-        NodeBT<T>* _buildFromOrderedArray(T arr[], int start, int end) {
+        NodeBT<TK,TV>* _buildFromOrderedArray(TK arr[], int start, int end) {
             if (start > end) {
                 return nullptr;
             }
 
             int mid = (start + end) / 2;
-            NodeBT<T> *node = new NodeBT<T>(arr[mid]);
+            
+            NodeBT<TK,TV> *node = new NodeBT<TK,TV>(arr[mid]);
 
             node->left = _buildFromOrderedArray(arr, start, mid - 1);
             node->right = _buildFromOrderedArray(arr, mid + 1, end);
@@ -331,28 +338,44 @@ class BSTree {
             return node;
         }
 
-        void _displayDFS(NodeBT<T>* nodo, stringstream& ss) {
+        void _displayDFS(NodeBT<TK,TV>* nodo, stringstream& ss) {
             if (nodo != nullptr) {
-                ss << nodo->data << " ";
+                ss << nodo->key << " ";
                 _displayDFS(nodo->left, ss);
                 _displayDFS(nodo->right, ss);
             }
         }
 
-        void _findRange(NodeBT<T>* node,T valueStart, T valueEnd, vector<T> &result){
+        void _findRange(NodeBT<TK, TV>* node,TK valueStart, TK valueEnd, vector<pair<TK, TV>> &result){
             if (node ==nullptr) return;
 
-            if (valueStart < node->data  ) {
+            if (valueStart < node->key  ) {
                 _findRange (node->left, valueStart, valueEnd,result);
             }
             ///argrega valor
-            if (valueStart <= node->data && valueEnd >= node->data){
-                result.push_back(node->data);
+            if (valueStart <= node->key && valueEnd >= node->key){
+                result.push_back(make_pair(node->key,node->value));
             }
-            if (valueEnd > node->data ) {
+            if (valueEnd > node->key ) {
              _findRange (node->right, valueStart, valueEnd,result);
             }
         }
+
+        void _findKey(NodeBT<TK, TV>* node,TK value, vector<pair<TK, TV>> &result){
+            if (node ==nullptr) return;
+
+            if (value < node->key  ) {
+                _findKey (node->left, value,result);
+            }
+            ///argrega valor
+            if (value == node->key ){
+                result.push_back(make_pair(node->key,node->value));
+            }
+            if (value >= node->key ) {
+             _findKey (node->right, value,result);
+            }
+        }
+
 
 }; 
 

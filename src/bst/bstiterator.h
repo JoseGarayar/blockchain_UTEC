@@ -9,69 +9,53 @@ enum class TypeBSTOrder{
     };
 
 
-template <typename T>
+template<typename TK, typename TV>
 class BSTIterator
 {
 public:
     
 private:
 
-    std::stack<NodeBT<T>*> nodes;
-    std::queue<NodeBT<T>*> bfsQueue;
+    std::stack<NodeBT<TK,TV>*> nodes;
+    std::queue<NodeBT<TK,TV>*> bfsQueue;
     TypeBSTOrder traversalOrder;
-
-   /* NodeBT<T> *current;
-    TypeBSTOrder type;
-    stack<NodeBT<T>*> stackTree;*/
 
 public:
     BSTIterator() : traversalOrder(TypeBSTOrder::InOrder) {};
 
-    BSTIterator(NodeBT<T>* root, TypeBSTOrder order = TypeBSTOrder::InOrder) : traversalOrder(order) {
+    BSTIterator(NodeBT<TK, TV>* root, TypeBSTOrder order = TypeBSTOrder::InOrder) : traversalOrder(order) {
         pushAll(root);
     }
-/*
-    BSTIterator(NodeBT<T> *current,  TypeBSTOrder type=TypeBSTOrder::InOrder) {
-        this->type = type;
-        _fillStack(current, type);
-        popstack();
-    }
-*/
+
     bool hasNext() {
         return !nodes.empty() || !bfsQueue.empty();
     }
 
-    BSTIterator<T> &operator++() {
+    BSTIterator<TK,TV> &operator++() {
         if (traversalOrder == TypeBSTOrder::BFS) {
-            NodeBT<T>* node = bfsQueue.front();
+            NodeBT<TK,TV>* node = bfsQueue.front();
             bfsQueue.pop();
             pushAll(node->left);
             pushAll(node->right);
         } else {
-            NodeBT<T>* node = nodes.top();
+            NodeBT<TK,TV>* node = nodes.top();
             nodes.pop();
             if (traversalOrder == TypeBSTOrder::InOrder)  pushAll(node->right);
             
-            /*if (traversalOrder == TypeBSTOrder::InOrder) {
-                pushAll(node->right);
-            } else if (traversalOrder == TypeBSTOrder::PreOrder) {
-                pushAll(node->right);
-                pushAll(node->left);
-            }*/
         }
 
         return *this;
     }
 
-    T operator*() {
+    TK operator*() {
         if (traversalOrder == TypeBSTOrder::BFS) {
-            return bfsQueue.front()->data;
+            return bfsQueue.front()->key;
         } else {
-            return nodes.top()->data;
+            return nodes.top()->key;
         }
     }
 
-    bool operator!=(const BSTIterator<T>& other) const {
+    bool operator!=(const BSTIterator<TK,TV>& other) const {
         if (traversalOrder == TypeBSTOrder::BFS && other.traversalOrder == TypeBSTOrder::BFS) {
             return !bfsQueue.empty() || !other.bfsQueue.empty();
         } else {
@@ -79,28 +63,11 @@ public:
         }
     }
 
-//    BSTIterator<T> &operator=(BSTIterator<T> other){};
 
-/*    bool operator!=(BSTIterator<T> other){
-        return this->current != other.current;
-    }
-*/
-
-
-/*
-    BSTIterator<T> &operator++(){
-        popstack();
-        return *this;
-    }   //++it
-    
-    T operator*(){
-        return current->data;
-    }
-*/
 private:
 
 
-    void pushAll(NodeBT<T>* node) {
+    void pushAll(NodeBT<TK,TV>* node) {
         if (node == nullptr) {
             return;
         }
@@ -115,11 +82,11 @@ private:
             pushAll(node->left);
             nodes.push(node);
         } else if (traversalOrder == TypeBSTOrder::PostOrder) {
-            std::stack<NodeBT<T>*> tempStack;
+            std::stack<NodeBT<TK,TV>*> tempStack;
             tempStack.push(node);
 
             while (!tempStack.empty()) {
-                NodeBT<T>* curr = tempStack.top();
+                NodeBT<TK,TV>* curr = tempStack.top();
                 tempStack.pop();
                 nodes.push(curr);
 
@@ -135,28 +102,6 @@ private:
         }
     }
 
-    /*void _fillStack(NodeBT<T>* node, TypeBSTOrder type){
-       if (node ==nullptr) return;
-       if (type== TypeBSTOrder::PreOrder){
-            stackTree.push(node);
-        }
-        _fillStack(node->left, type);
-        if (type== TypeBSTOrder::InOrder){
-            stackTree.push(node);
-        }
-        _fillStack(node->right, type);
-        if (type== TypeBSTOrder::PostOrder){
-            stackTree.push(node);
-        }
-    }
-
-    void popstack() {
-          if (stackTree.empty()) current=nullptr;
-        else {
-            current = stackTree.top();
-            stackTree.pop();
-        }
-    }*/
 
 };
 
