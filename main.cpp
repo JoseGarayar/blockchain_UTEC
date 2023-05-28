@@ -49,20 +49,58 @@ int main() {
 
 
 /*
-int main() {
-    string data = "Hello, world! Test";
-    string hash = "1234";
-    string prev = "0000000000000000000000000000000000000000000000000000000000000000";
-    int block_num = 0;
-    int nonce = 0;
-    while (hash.substr(0,4) != "0000") {
-        hash = calculateHash(to_string(block_num) + to_string(nonce) + data + prev);
-        nonce++;
-    }
-    nonce--;
-    cout << "Hash: " << hash << endl;
-    cout << "Nonce: " << nonce << endl;
+#include <iostream> 
 
-    return 0;
+// Funciones para las opciones del menú 
+void opcion1() { 
+    std::cout << "Opción 1 seleccionada." << std::endl; 
+} 
+
+void opcion2() { 
+    std::cout << "Opción 2 seleccionada." << std::endl; 
+} 
+
+void opcion3() { 
+    std::cout << "Opción 3 seleccionada." << std::endl; 
+} 
+
+void mostrarMenu() { 
+    std::cout << "----- MENÚ ----- " << std::endl; 
+    std::cout << "1. Opción 1" << std::endl; 
+    std::cout << "2. Opción 2" << std::endl; 
+    std::cout << "3. Opción 3" << std::endl; 
+    std::cout << "0. Salir" << std::endl; 
+    std::cout << "-----------------" << std::endl; 
+    std::cout << "Seleccione una opción: "; 
+} 
+
+int main() { 
+    int opcion; 
+    while (true) { 
+        mostrarMenu(); 
+        std::cin >> opcion; 
+
+        switch (opcion) { 
+            case 1: 
+                opcion1(); 
+                break; 
+            case 2: 
+                opcion2(); 
+                break; 
+            case 3: 
+                opcion3(); 
+                break; 
+            case 0: 
+                std::cout << "Saliendo del programa..." << std::endl; 
+                return 0; 
+            default: 
+                std::cout << "Opción inválida. Intente nuevamente." << std::endl; 
+                break; 
+        } 
+        std::cout << std::endl; 
+    } 
+
+    return 0; 
+
 }
 */
