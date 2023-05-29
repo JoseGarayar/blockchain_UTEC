@@ -54,6 +54,15 @@ public:
         }
     }
     
+    void remove(const TK& first) {
+        size_t hashcode = hasher(first);
+        int index = hashcode % capacity;
+        
+        array[index].remove_if([&](const Pair<TK, TV>& pair) {
+            return pair.first == first;
+        });
+    }
+    
     int bucket_count() {
         return capacity;
     }
@@ -68,6 +77,20 @@ public:
     
     forward_list<Pair<TK, TV>>::iterator end(int index) {
         return array[index].end();
+    }
+
+    Pair<TK, TV>* find(const TK& first) {
+        size_t hashcode = hasher(first);
+        int index = hashcode % capacity;
+        
+        for (auto it = array[index].begin(); it != array[index].end(); ++it) {
+            if (it->first == first) {
+                return &(*it);
+            }
+        }
+        
+        cout << "No existe la clave: " << first << endl;
+        return nullptr;
     }
     
 private:
