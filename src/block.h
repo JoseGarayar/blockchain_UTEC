@@ -92,4 +92,28 @@ public:
         return (this->hash==mineBlock());
     }
 
+    void update_block(int index, const vector<Transaction>& data, const string& previousHash) {
+        this->index = index;
+        this->data = data;
+        this->previousHash = previousHash;
+        this->hash = mineBlock();
+    }
+
+    void displayBlock() {
+        cout << "Index: " << getIndex() << endl;
+        cout << "Nonce: " << getNonce() << endl;
+        cout << "Transactions: " << endl;
+        for (const Transaction& transaction : getData()) {
+            cout << "  ID Transaccion: " << transaction.idTransaccion << endl;
+            cout << "  Nombre 1: " << transaction.nombreOrigen << endl;
+            cout << "  Nombre 2: " << transaction.nombreDestino << endl;
+            cout << "  Importe: " << transaction.importe << endl;
+            cout << "  Fecha: " << transaction.fecha << endl;
+            cout << endl;
+        }
+        cout << "Previous Hash: " << getPreviousHash() << endl;
+        cout << "Hash: " << getHash() << endl;
+        cout << endl;
+    }
+
 };

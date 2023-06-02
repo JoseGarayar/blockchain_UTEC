@@ -18,15 +18,59 @@ public:
 
     void addBlock(const vector<Transaction>& data) {
         int index = blockchain.size();
-        string defaultHash = string(64, '0');
-        const string& previousHash = index != 0 ? blockchain.back()->getHash() : defaultHash;
+        const string& previousHash = index != 0 ? blockchain.back()->getHash() : defaultHash();
         Block* newBlock = new Block(index, data, previousHash);
         blockchain.push_back(newBlock);        
 
-       /* for (const Transaction& transaction : data) {
+        /* Agregar insercion en estructuras de indices
+        for (const Transaction& transaction : data) {
             index[transaction.idTransaccion] = newBlock;
         }*/
 
+    }
+
+    void deleteBlock(int index) {
+        if (index < 0 || index >= blockchain.size()) {
+            cout << "El bloque no existe" << endl;
+            return;
+        }
+        blockchain.remove(index);
+        cascadeEffect();
+        /*
+            Agregar eliminacion en estructuras de indices
+        */
+    }
+
+    void updateDataBlock(int index, const vector<Transaction>& data) {
+        if (index < 0 || index >= blockchain.size()) {
+            cout << "El bloque no existe" << endl;
+            return;
+        }
+        if (index == 0) {
+            blockchain[index]->update_block(index, data, defaultHash());
+        } else {
+            blockchain[index]->update_block(index, data, blockchain[index-1]->getHash());
+        }
+        cascadeEffect();
+        /*
+            Agregar actualizacion en estructuras de indices
+        */
+    }
+
+    void cascadeEffect() {
+        CircularDoubleList<Block*>::iterator ite = blockchain.begin();
+        CircularDoubleList<Block*>::iterator ite_prev = blockchain.begin();
+        int i = 0;
+        for(; ite != blockchain.end(); ++ite){
+            if (i == 0) {
+                (*ite)->update_block(i, (*ite)->getData(), defaultHash());
+                ite_prev = ite;
+            } else {
+                (*ite)->update_block(i, (*ite)->getData(), (*ite_prev)->getHash());
+                ++ite_prev;
+            }
+            i++;
+        }
     }
 
     bool validateChain()  {
@@ -54,26 +98,15 @@ public:
     }
 
     void displayChain()  {
-
-        CircularDoubleList<Block*>::iterator ite = blockchain.begin();
-
-        for(; ite != blockchain.end(); ++ite){
-            cout << "Index: " << (*ite)->getIndex() << endl;
-            cout << "Transactions: " << endl;
-            for (const Transaction& transaction : (*ite)->getData()) {
-                cout << "  ID Transaccion: " << transaction.idTransaccion << endl;
-                cout << "  Nombre 1: " << transaction.nombreOrigen << endl;
-                cout << "  Nombre 2: " << transaction.nombreDestino << endl;
-                cout << "  Importe: " << transaction.importe << endl;
-                cout << "  Fecha: " << transaction.fecha << endl;
-                cout << endl;
-            }
-            
-            cout << "Previous Hash: " << (*ite)->getPreviousHash() << endl;
-            cout << "Hash: " << (*ite)->getHash() << endl;
-            cout << endl;
+        CircularDoubleList<Block*>::iterator ite = begin();
+        for(; ite != end(); ++ite){
+            (*ite)->displayBlock();
         }
+    }
 
+    string defaultHash() {
+        string defaultHash = string(64, '0');
+        return defaultHash;
     }
 
     iterator begin(){
