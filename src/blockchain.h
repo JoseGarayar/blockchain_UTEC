@@ -14,25 +14,19 @@ private:
 public:
     typedef CircularDoubleListIterator<Block*> iterator;
 
-    Blockchain() {
-        Block* initialBlock = new Block(0, vector<Transaction>(), "0");
-        blockchain.push_back(initialBlock);
-        
-    }
+    Blockchain() {}
 
     void addBlock(const vector<Transaction>& data) {
         int index = blockchain.size();
-        
-        const string& previousHash = blockchain.back()->getHash();
+        string defaultHash = string(64, '0');
+        const string& previousHash = index != 0 ? blockchain.back()->getHash() : defaultHash;
         Block* newBlock = new Block(index, data, previousHash);
-        blockchain.push_back(newBlock);
-        
+        blockchain.push_back(newBlock);        
 
        /* for (const Transaction& transaction : data) {
             index[transaction.idTransaccion] = newBlock;
         }*/
 
-        
     }
 
     bool validateChain()  {

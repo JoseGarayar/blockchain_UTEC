@@ -1,6 +1,5 @@
 
 #include "src/blockchain.h"
-//#include "hash_function.h"
 
 void displayChain(Blockchain* blockchain)  {
 
@@ -8,6 +7,7 @@ void displayChain(Blockchain* blockchain)  {
 
     for(; ite != blockchain->end(); ++ite){
         cout << "Index: " << (*ite)->getIndex() << endl;
+        cout << "Nonce: " << (*ite)->getNonce() << endl;
         cout << "Transactions: " << endl;
         for (const Transaction& transaction : (*ite)->getData()) {
             cout << "  ID Transaccion: " << transaction.idTransaccion << endl;
