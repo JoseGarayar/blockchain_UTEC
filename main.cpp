@@ -50,7 +50,7 @@ int main() {
 
     cout<< "Busqueda por Nombre Emisor" << endl;
 
-    vec =  blockchain.findTransactionsByFromName("Jose"); 
+    vec =  blockchain.findTransactionsByFromName("Alice"); 
     for(auto ele : vec) {        
             cout << "  ID Transaccion: " << ele.idTransaccion << endl;
             cout << "  Nombre 1: " << ele.nombreOrigen << endl;
@@ -61,7 +61,7 @@ int main() {
     }
 
     cout<< "Busqueda por Nombre Receptor" << endl;
-    vec =  blockchain.findTransactionsByToName("Alice"); 
+    vec =  blockchain.findTransactionsByToName("Martha"); 
     for(auto ele : vec) {        
             cout << "  ID Transaccion: " << ele.idTransaccion << endl;
             cout << "  Nombre 1: " << ele.nombreOrigen << endl;
