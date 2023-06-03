@@ -1,30 +1,4 @@
-
 #include "src/blockchain.h"
-//#include "hash_function.h"
-
-void displayChain(Blockchain* blockchain)  {
-
-    Blockchain::iterator ite = blockchain->begin();
-
-    for(; ite != blockchain->end(); ++ite){
-        cout << "Index: " << (*ite)->getIndex() << endl;
-        cout << "Transactions: " << endl;
-        for (const Transaction& transaction : (*ite)->getData()) {
-            cout << "  ID Transaccion: " << transaction.idTransaccion << endl;
-            cout << "  Nombre 1: " << transaction.nombreOrigen << endl;
-            cout << "  Nombre 2: " << transaction.nombreDestino << endl;
-            cout << "  Importe: " << transaction.importe << endl;
-            cout << "  Fecha: " << transaction.fecha << endl;
-            cout << endl;
-        }
-        
-        cout << "Previous Hash: " << (*ite)->getPreviousHash() << endl;
-        cout << "Hash: " << (*ite)->getHash() << endl;
-        cout << endl;
-    }
-    
-}
-
 
 int main() {
     Blockchain blockchain;
@@ -39,11 +13,28 @@ int main() {
     transactions2.push_back({5, "Alice", "Bob", 100.0, "2023-05-24"});
     blockchain.addBlock(transactions2);
 
-    displayChain(&blockchain);
+    std::vector<Transaction> transactions3;
+    transactions3.push_back({4, "Karl", "Bob", 250.0, "2023-05-26"});
+    transactions3.push_back({5, "John", "Karl", 350.0, "2023-05-27"});
+    blockchain.addBlock(transactions3);
 
-    bool isvalid = blockchain.validateChain();
-   
-    cout<< isvalid << endl;
+    blockchain.displayChain();
+
+    cout << "is valid? " << blockchain.validateChain() << endl;
+    cout << endl;
+    cout << endl;
+
+    blockchain.deleteBlock(3);
+    blockchain.displayChain();
+    cout << "is valid? " << blockchain.validateChain() << endl;
+    cout << endl;
+    cout << endl;
+
+    std::vector<Transaction> transactions4;
+    transactions4.push_back({6, "Alice", "Martha", 50.0, "2023-05-27"});
+    blockchain.updateDataBlock(0,transactions4);
+    blockchain.displayChain();
+    cout << "is valid? " << blockchain.validateChain() << endl;
 
     cout<< "Busqueda por Rango" << endl;
 

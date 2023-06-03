@@ -39,6 +39,10 @@ public:
         return index;
     }
 
+    int getNonce() const {
+        return nonce;
+    }
+
     vector<Transaction> getData() const {
         return data;
     }
@@ -53,25 +57,22 @@ public:
 
     string mineBlock() {
         string targetPrefix = "0000";
-        string target = targetPrefix + string(SHA256_DIGEST_LENGTH / 2 - targetPrefix.size(), '0');
-
         while (true) {
-            hash = calculateHash(data, previousHash, nonce);
-
-            if (hash.substr(0, targetPrefix.size()) == targetPrefix) {
+            hash = calculateHash(index, data, previousHash, nonce);
+            if (hash.substr(0,4) == targetPrefix) {
                 return hash;
             }
-
             nonce++;
         }
     }
 
-     string calculateHash(const vector<Transaction>& data, const string& previousHash,  int nonce) const {
+    string calculateHash(int index, const vector<Transaction>& data, const string& previousHash, int nonce) const {
         stringstream ss;
+        ss << index;
         for (const Transaction& transaction : data) {
             ss << transaction.idTransaccion << transaction.nombreOrigen << transaction.nombreDestino << transaction.importe << transaction.fecha;
         }
-        ss << previousHash << nonce;
+        ss << previousHash << nonce << index;
 
         unsigned char hash[SHA256_DIGEST_LENGTH];
         SHA256_CTX sha256;
@@ -89,6 +90,30 @@ public:
 
     bool isValid(){
         return (this->hash==mineBlock());
+    }
+
+    void update_block(int index, const vector<Transaction>& data, const string& previousHash) {
+        this->index = index;
+        this->data = data;
+        this->previousHash = previousHash;
+        this->hash = mineBlock();
+    }
+
+    void displayBlock() {
+        cout << "Index: " << getIndex() << endl;
+        cout << "Nonce: " << getNonce() << endl;
+        cout << "Transactions: " << endl;
+        for (const Transaction& transaction : getData()) {
+            cout << "  ID Transaccion: " << transaction.idTransaccion << endl;
+            cout << "  Nombre 1: " << transaction.nombreOrigen << endl;
+            cout << "  Nombre 2: " << transaction.nombreDestino << endl;
+            cout << "  Importe: " << transaction.importe << endl;
+            cout << "  Fecha: " << transaction.fecha << endl;
+            cout << endl;
+        }
+        cout << "Previous Hash: " << getPreviousHash() << endl;
+        cout << "Hash: " << getHash() << endl;
+        cout << endl;
     }
 
 };
