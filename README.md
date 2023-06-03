@@ -79,9 +79,9 @@ Jose Garayar:
 - Investigar y aplicar concepto de prueba de trabajo.
 - Implementar función de efecto cascada.
 - Implementar función eliminar bloque y actualizar data del bloque para menú del blockchain.
-- Crear tareas para cada miembro del grupo en Github Project Boards. Enlace: https://github.com/users/JoseGarayar/projects/1/views/1?layout=board
-![Github Project Board](https://github.com/JoseGarayar/blockchain_UTEC/tree/main/src/assets/github_project_board.png)
 - Crear estructura de informe final en el archivo README del proyecto
+- Crear tareas para cada miembro del grupo en Github Project Boards. Enlace: https://github.com/users/JoseGarayar/projects/1/views/1?layout=board
+![github_project_board](https://github.com/JoseGarayar/blockchain_UTEC/assets/53947785/398348b6-91e1-4aab-b1e7-d9560d224b9d)
 
 Roberth Ramos
 
