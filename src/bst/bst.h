@@ -114,6 +114,15 @@ class BSTree {
             _findKey(root, key, result) ;
             return result;
         }
+
+        vector<pair<TK, TV>> findKeyBeginWith(TK key){
+            vector<pair<TK, TV>> result;
+
+            _findKeyBeginWith(root, key, result) ;
+            return result;
+        }
+
+        
         
         string displayBFS(){// Recorrido en anchura (BreadthFirstSearch)
 
@@ -376,6 +385,32 @@ class BSTree {
             }
         }
 
+        void _findKeyBeginWith(NodeBT<TK, TV>* node,TK value, vector<pair<TK, TV>> &result){
+            if (node ==nullptr) return;
+            string svalue =_toString(value);
+            if (value < _toString(node->key).substr(0,svalue.size())  ) {
+                _findKey (node->left, value,result);
+            }
+            ///argrega valor
+            
+            if (svalue == _toString(node->key).substr(0,svalue.size()) ){
+                result.push_back(make_pair(node->key,node->value));
+            }
+            if (value >= _toString(node->key).substr(0,svalue.size()) ) {
+             _findKey (node->right, value,result);
+            }
+        }
+
+        string _toString(TK key){
+            stringstream ss;
+            string result;
+            ss << key;
+            ss >> result;
+            if (ss.fail()){
+                result="";
+            }
+            return result;
+        }
 
 }; 
 

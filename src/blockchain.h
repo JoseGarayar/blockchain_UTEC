@@ -102,7 +102,16 @@ public:
         return result;
     }
 
+    vector<Transaction> findTransactionsByFromNameBeginWith(string name){
 
+        vector<Transaction> result;
+        vector<pair<string, Transaction*>> arr = bstreeFromName->findKeyBeginWith(name);
+        for(auto ele : arr) {        
+            result.push_back( *ele.second);                    
+        }
+        return result;
+        
+    }
 
     void displayChain()  {
 

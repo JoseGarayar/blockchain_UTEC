@@ -80,6 +80,17 @@ int main() {
             cout << endl;                   
     }
 
+    cout<< "Busqueda por Nombre Emison Inicia con " << endl;
+    vec =  blockchain.findTransactionsByFromNameBeginWith("J"); 
+    for(auto ele : vec) {        
+            cout << "  ID Transaccion: " << ele.idTransaccion << endl;
+            cout << "  Nombre 1: " << ele.nombreOrigen << endl;
+            cout << "  Nombre 2: " << ele.nombreDestino << endl;
+            cout << "  Importe: " << ele.importe << endl;
+            cout << "  Fecha: " << ele.fecha << endl;
+            cout << endl;                   
+    }
+
 }
 
 
