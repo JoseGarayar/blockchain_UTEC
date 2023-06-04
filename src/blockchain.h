@@ -3,6 +3,7 @@
 #include <unordered_map>
 #include "circulardoublelist/circulardoublelist.h"
 #include "bst/bst.h"
+#include "heap/heap.h"
 
 using namespace std;
 
@@ -17,7 +18,10 @@ private:
     BSTree<string, int > *bstreeFromName = new BSTree<string, int>();
     //indice BST para los nombrereceptor
     BSTree<string, int > *bstreeToName = new BSTree<string, int >();
-
+    // índice maxheap
+    MaxHeap<Transaction> maxHeap;
+    // índice minheap
+    MinHeap<Transaction> minHeap;
 public:
     typedef CircularDoubleListIterator<Block*> iterator;
 
@@ -39,6 +43,9 @@ public:
             bstreeAmount->insert (transaction.importe, index);
             bstreeFromName->insert (transaction.nombreOrigen, index);
             bstreeToName->insert (transaction.nombreDestino, index);
+
+            maxHeap.insert(transaction);
+            minHeap.insert(transaction);
         }
         
     }
@@ -57,6 +64,11 @@ public:
             bstreeAmount->remove(transaction.importe);
             bstreeFromName->remove(transaction.nombreOrigen);
             bstreeToName->remove(transaction.nombreDestino);
+/*
+maxHeap.deleteNode(transaction);
+            minHeap.deleteNode(transaction);
+*/
+            
         }
 
         blockchain.remove(index);
@@ -127,6 +139,16 @@ public:
             return it->second;
         }
         return nullptr;
+    }
+
+    // Complejidad O(1)
+    Transaction findMaxTransaction() {
+        return maxHeap.extractMax();
+    }
+
+    // Complejidad O(1)
+    Transaction findMinTransaction() {
+        return minHeap.extractMin();
     }
 
     vector<Transaction> findTransactionsByRangeof(double amountIni, double amountEnd){

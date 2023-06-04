@@ -10,19 +10,20 @@
 
 #include <iostream>
 #include <vector>
+
 using namespace std;
 
-template <typename T>
+template <typename Transactions>
 class MaxHeap {
 private:
-    vector<T> heapArray;
+    vector<Transactions> heapArray;
     int heapSize;
 
     void heapifyUp(int index) {
         int parent = (index - 1) / 2;
 
-        while (index > 0 && heapArray[index] > heapArray[parent]) {
-            std::swap(heapArray[index], heapArray[parent]);
+        while (index > 0 && heapArray[index].importe > heapArray[parent].importe) {
+            swap(heapArray[index], heapArray[parent]);
             index = parent;
             parent = (index - 1) / 2;
         }
@@ -33,14 +34,14 @@ private:
         int rightChild = 2 * index + 2;
         int largest = index;
 
-        if (leftChild < heapSize && heapArray[leftChild] > heapArray[largest])
+        if (leftChild < heapSize && heapArray[leftChild].importe > heapArray[largest].importe)
             largest = leftChild;
 
-        if (rightChild < heapSize && heapArray[rightChild] > heapArray[largest])
+        if (rightChild < heapSize && heapArray[rightChild].importe > heapArray[largest].importe)
             largest = rightChild;
 
         if (largest != index) {
-            std::swap(heapArray[index], heapArray[largest]);
+            swap(heapArray[index], heapArray[largest]);
             heapifyDown(largest);
         }
     }
@@ -52,36 +53,37 @@ public:
         return heapSize == 0;
     }
 
-    void insert(const T& item) {
+    void insert(const Transactions& item) {
         heapArray.push_back(item);
         heapSize++;
         heapifyUp(heapSize - 1);
     }
 
-    T extractMax() {
+    Transactions extractMax() {
         if (isEmpty())
-            throw std::out_of_range("MaxHeap is empty");
+            throw out_of_range("MaxHeap is empty");
 
-        T maxItem = heapArray[0];
-        std::swap(heapArray[0], heapArray[heapSize - 1]);
+        Transactions maxItem = heapArray[0];
+        swap(heapArray[0], heapArray[heapSize - 1]);
         heapSize--;
         heapifyDown(0);
 
         return maxItem;
     }
+    
 };
 
-template <typename T>
+template <typename Transactions>
 class MinHeap {
 private:
-    vector<T> heapArray;
+    vector<Transactions> heapArray;
     int heapSize;
 
     void heapifyUp(int index) {
         int parent = (index - 1) / 2;
 
-        while (index > 0 && heapArray[index] < heapArray[parent]) {
-            std::swap(heapArray[index], heapArray[parent]);
+        while (index > 0 && heapArray[index].importe < heapArray[parent].importe) {
+            swap(heapArray[index], heapArray[parent]);
             index = parent;
             parent = (index - 1) / 2;
         }
@@ -92,14 +94,14 @@ private:
         int rightChild = 2 * index + 2;
         int smallest = index;
 
-        if (leftChild < heapSize && heapArray[leftChild] < heapArray[smallest])
+        if (leftChild < heapSize && heapArray[leftChild].importe < heapArray[smallest].importe)
             smallest = leftChild;
 
-        if (rightChild < heapSize && heapArray[rightChild] < heapArray[smallest])
+        if (rightChild < heapSize && heapArray[rightChild].importe < heapArray[smallest].importe)
             smallest = rightChild;
 
         if (smallest != index) {
-            std::swap(heapArray[index], heapArray[smallest]);
+            swap(heapArray[index], heapArray[smallest]);
             heapifyDown(smallest);
         }
     }
@@ -111,26 +113,24 @@ public:
         return heapSize == 0;
     }
 
-    void insert(const T& item) {
+    void insert(const Transactions& item) {
         heapArray.push_back(item);
         heapSize++;
         heapifyUp(heapSize - 1);
     }
 
-    T extractMin() {
+    Transactions extractMin() {
         if (isEmpty())
-            throw std::out_of_range("MinHeap is empty");
+            throw out_of_range("MinHeap is empty");
 
-        T minItem = heapArray[0];
-        std::swap(heapArray[0], heapArray[heapSize - 1]);
+        Transactions minItem = heapArray[0];
+        swap(heapArray[0], heapArray[heapSize - 1]);
         heapSize--;
         heapifyDown(0);
 
         return minItem;
     }
+    
 };
-
-
-
 
 #endif /* Heap_h */
