@@ -242,6 +242,10 @@ public:
         return blockchain.end();
     }   
 
+    void clear(){
+        blockchain.clear();
+    }
+
     ~Blockchain() {
         blockchain.clear();
         /*for (auto& pair : index) {

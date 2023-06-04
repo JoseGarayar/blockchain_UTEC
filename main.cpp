@@ -14,8 +14,8 @@ int main() {
         
         std::string opcionesMenu[] = {"1. Insertar Bloque",
             "2. Gererar Blockchain desde archivo", 
-            "3. Buscar por Emisor", 
-            "4. Buscar por Receptor", 
+            "3. Mostrar Blockchain",
+            "4. Buscar por Emisor o Receptor",             
             "5. Buscar por Rango",             
             "6. Buscar Máximo Monto",             
             "7. Buscar Monto Mínimo",
@@ -27,6 +27,7 @@ int main() {
                 // Opción 1: Insertar registro
                 writer.clearScreen();
                 writer.write(10, 5, "Opción 1 seleccionada: Insertar registro");
+
                 // Aquí puedes agregar el código correspondiente para insertar un registro
                 break;
             case '2':
@@ -36,8 +37,9 @@ int main() {
                 break;
             case '3':
                 // Opción 2: Cargar desde archivo
-                writer.clearScreen();
-                writer.write(10, 5, "Opción 2 seleccionada: Cargar desde archivo");
+                //writer.clearScreen();
+                //writer.write(10, 5, "Opción 2 seleccionada: Cargar desde archivo");
+                displaychain(blockchain, writer);
                 // Aquí puedes agregar el código correspondiente para cargar desde un archivo
                 break;
             case '4':
@@ -148,7 +150,7 @@ void pruebas(){
             cout << endl;                   
     }
 
-    cout<< "Busqueda por Nombre Emisor" << endl;
+    cout<< "Busqued-a por Nombre Emisor" << endl;
 
     vec =  blockchain.findTransactionsByFromName("Alice"); 
     for(auto ele : vec) {        

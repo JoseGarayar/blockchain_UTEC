@@ -9,6 +9,11 @@
 #endif
 
 class ConsoleWriter {
+
+private:
+    int maxrow;
+    int maxcol;
+
 public:
     ConsoleWriter() {
         #ifdef _WIN32
@@ -27,8 +32,18 @@ public:
             noecho();
             keypad(stdscr, TRUE);
             curs_set(0);
+            getmaxyx( stdscr, maxcol, maxrow );
+
             
         #endif
+    }
+
+    int getmaxcol(){
+        return maxcol;
+    }
+
+    int getmaxrow(){
+        return maxrow;
     }
 
     ~ConsoleWriter() {
@@ -127,6 +142,12 @@ public:
     char getchr(){
 
         char str = getch();
+        return str;
+    }
+
+    int getwchr(){
+
+        int str = wgetch(stdscr);
         return str;
     }
 
