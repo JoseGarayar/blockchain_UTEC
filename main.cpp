@@ -1,6 +1,6 @@
 
 #include <vector>
-#include "src/menuoptions/options.h"
+#include "src/menuoptions//options.h"
 
 using namespace std;
 
@@ -81,8 +81,9 @@ int main() {
                 break;
             case '5':
                 // Buscar por Rango
-                writer.clearScreen();
-                writer.write(10, 5, "Opción 2 seleccionada: Cargar desde archivo");
+                //writer.clearScreen();
+                //writer.write(10, 5, "Opción 2 seleccionada: Cargar desde archivo");                
+                opcionBuscarRangoFechas(blockchain,writer);
                 // Aquí puedes agregar el código correspondiente para cargar desde un archivo
                 break;
             case '6':
