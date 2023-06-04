@@ -14,12 +14,11 @@ void opcion1InsertarBloque(Blockchain & blockchain, ConsoleWriter writer){
     int nroRegPorBloque = 5;
     int nrotransenbloque = 0;
 
-
     vector<Transaction> transaction;
     writer.clearScreen();
     writer.write(2,10,"INSERTAR BLOQUE");
 
-    writer.write(4,5,"Indicar el número de transacciones a ingresar");
+    writer.write(4,5,"Indicar el número de transacciones a ingresar: ");
     ntran = writer.readInt();
     for (int i=1; i<= ntran;i++ ){
         string ss = "ID Transaccion: " + std::to_string(i);
@@ -28,24 +27,31 @@ void opcion1InsertarBloque(Blockchain & blockchain, ConsoleWriter writer){
         nroTran = writer.readInt();
         writer.write(++row,5,"Nombre Emisor:");
         nombreEmisor = writer.readString();
-        writer.write(++row,5,"Nombre Receptor:");
+        writer.write(row,50,"Nombre Receptor:");
         nombreReceptor = writer.readString();
 
-        writer.write(++row,5,"Importe:v");
+        writer.write(++row,5,"Importe: ");
         importe = writer.readDouble();
 
-        writer.write(++row,5,"Fecha Transacción (yyyy-mm-dd): ");
+        writer.write(row,50,"Fecha Transacción (yyyy-mm-dd): ");
         fechatrans = writer.readString();
         transaction.push_back({nroTran,nombreEmisor ,nombreReceptor, importe, fechatrans});
-
+        ++row;
         if(nrotransenbloque<nroRegPorBloque-1){            
             nrotransenbloque++;
         }
         else{
             blockchain.addBlock(transaction);
             nrotransenbloque=0;
-            transaction.clear();                        
+            transaction.clear();
+            row= 5;
+            writer.clearScreen();
+            writer.write(2,10,"INSERTAR BLOQUE");
+            ss = "Indicar el número de transacciones a ingresar: " + std::to_string(ntran);
+            writer.write(4,5,ss);
+
         }   
+
     }
     if (!transaction.empty()){
          blockchain.addBlock(transaction);
