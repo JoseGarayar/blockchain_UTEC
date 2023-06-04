@@ -22,7 +22,7 @@ private:
     void heapifyUp(int index) {
         int parent = (index - 1) / 2;
 
-        while (index > 0 && heapArray[index].importe > heapArray[parent].importe) {
+        while (index > 0 && heapArray[index] > heapArray[parent]) {
             swap(heapArray[index], heapArray[parent]);
             index = parent;
             parent = (index - 1) / 2;
@@ -34,10 +34,10 @@ private:
         int rightChild = 2 * index + 2;
         int largest = index;
 
-        if (leftChild < heapSize && heapArray[leftChild].importe > heapArray[largest].importe)
+        if (leftChild < heapSize && heapArray[leftChild] > heapArray[largest])
             largest = leftChild;
 
-        if (rightChild < heapSize && heapArray[rightChild].importe > heapArray[largest].importe)
+        if (rightChild < heapSize && heapArray[rightChild] > heapArray[largest])
             largest = rightChild;
 
         if (largest != index) {
@@ -70,6 +70,24 @@ public:
 
         return maxItem;
     }
+
+    void deleteNode(const Transaction& item) {
+        auto iter = find(heapArray.begin(), heapArray.end(), item); // O(n)
+        if (iter == heapArray.end()) {
+            out_of_range("Node not found");
+        }
+
+        swap(*iter, heapArray[heapSize - 1]); // O(1)
+        heapArray.pop_back();
+        heapSize--;
+
+        if (item > *iter) {
+            heapifyUp(iter - heapArray.begin()); // O(log n)
+        } else {
+            heapifyDown(iter - heapArray.begin()); // O(log n)
+        }
+    }
+
     
 };
 
@@ -79,25 +97,25 @@ private:
     vector<Transactions> heapArray;
     int heapSize;
 
-    void heapifyUp(int index) {
+    void heapifyUp(int index) { // O(log n)
         int parent = (index - 1) / 2;
 
-        while (index > 0 && heapArray[index].importe < heapArray[parent].importe) {
+        while (index > 0 && heapArray[index] < heapArray[parent]) {
             swap(heapArray[index], heapArray[parent]);
             index = parent;
             parent = (index - 1) / 2;
         }
     }
 
-    void heapifyDown(int index) {
+    void heapifyDown(int index) { // O(log n)
         int leftChild = 2 * index + 1;
         int rightChild = 2 * index + 2;
         int smallest = index;
 
-        if (leftChild < heapSize && heapArray[leftChild].importe < heapArray[smallest].importe)
+        if (leftChild < heapSize && heapArray[leftChild] < heapArray[smallest])
             smallest = leftChild;
 
-        if (rightChild < heapSize && heapArray[rightChild].importe < heapArray[smallest].importe)
+        if (rightChild < heapSize && heapArray[rightChild] < heapArray[smallest])
             smallest = rightChild;
 
         if (smallest != index) {
@@ -114,9 +132,9 @@ public:
     }
 
     void insert(const Transactions& item) {
-        heapArray.push_back(item);
+        heapArray.push_back(item); // O(1)
         heapSize++;
-        heapifyUp(heapSize - 1);
+        heapifyUp(heapSize - 1); // O(log n)
     }
 
     Transactions extractMin() {
@@ -124,11 +142,28 @@ public:
             throw out_of_range("MinHeap is empty");
 
         Transactions minItem = heapArray[0];
-        swap(heapArray[0], heapArray[heapSize - 1]);
+        swap(heapArray[0], heapArray[heapSize - 1]); // O(1)
         heapSize--;
-        heapifyDown(0);
+        heapifyDown(0); // O(log n)
 
         return minItem;
+    }
+
+    void deleteNode(const Transaction& item) {
+        auto iter = find(heapArray.begin(), heapArray.end(), item); // O(n)
+        if (iter == heapArray.end()) {
+            throw out_of_range("Node not found");
+        }
+
+        swap(*iter, heapArray[heapSize - 1]); // O(1)
+        heapArray.pop_back();
+        heapSize--;
+
+        if (item < *iter) {
+            heapifyUp(iter - heapArray.begin()); // O(log n)
+        } else {
+            heapifyDown(iter - heapArray.begin()); // O(log n)
+        }
     }
     
 };

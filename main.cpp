@@ -98,6 +98,18 @@ int main() {
     cout << "Nombre Destino: " << min.nombreDestino << endl;
     cout << "Importe : " << min.importe << endl;
     cout << "Fecha: " << min.fecha << endl;
+
+    cout << "Eliminar un nodo" << endl;
+    blockchain.deleteNodeFromHeap(0);
+
+    cout << "Nueva Transacción máxima" << endl;
+    Transaction new_max = blockchain.findMaxTransaction();
+    cout << "ID: " << new_max.idTransaccion << endl;
+    cout << "Nombre Origen: " << new_max.nombreOrigen << endl;
+    cout << "Nombre Destino: " << new_max.nombreDestino << endl;
+    cout << "Importe : " << new_max.importe << endl;
+    cout << "Fecha: " << new_max.fecha << endl;
+
 }
 
 
