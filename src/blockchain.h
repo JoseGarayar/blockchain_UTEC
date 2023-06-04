@@ -64,16 +64,25 @@ public:
             bstreeAmount->remove(transaction.importe);
             bstreeFromName->remove(transaction.nombreOrigen);
             bstreeToName->remove(transaction.nombreDestino);
-/*
-maxHeap.deleteNode(transaction);
-            minHeap.deleteNode(transaction);
-*/
-            
+
+            maxHeap.deleteNode(transaction);
+            minHeap.deleteNode(transaction);            
         }
 
         blockchain.remove(index);
         cascadeEffect();
         
+    }
+
+    void deleteNodeFromHeap(int index) {
+        if (index < 0 || index >= blockchain.size()) {
+            cout << "El bloque no existe" << endl;
+            return;
+        }
+
+        Block* block = blockchain[index];
+        maxHeap.deleteNode(block->getData()[0]);
+        minHeap.deleteNode(block->getData()[0]);
     }
 
     void updateDataBlock(int index, const vector<Transaction>& data) {
