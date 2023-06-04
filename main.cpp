@@ -25,10 +25,7 @@ int main() {
         switch (opcion) {
             case '1':
                 // Opción 1: Insertar registro
-                writer.clearScreen();
-                writer.write(10, 5, "Opción 1 seleccionada: Insertar registro");
-
-                // Aquí puedes agregar el código correspondiente para insertar un registro
+                opcion1InsertarBloque(blockchain, writer);
                 break;
             case '2':
                 // Opción 2: Cargar desde archivo
