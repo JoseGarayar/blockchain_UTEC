@@ -1,5 +1,8 @@
 #include <iostream>
-#include <string>
+#include <cstring>
+#include <ctype.h>
+#include <stdlib.h>
+
 
 #include <inttypes.h>
 #ifdef _WIN32
@@ -193,6 +196,21 @@ public:
         return value;
     }
 
+
+    std::string readDateString(int row, int col) {
+        nocbreak();
+        echo();
+
+        std::string value;
+        
+        char buffer[256];
+        getstr(buffer);
+        value = buffer;
+        cbreak();
+        noecho();
+        return value;
+    }
+
     char createMenu(std::string title, std::string optionsMenu[], int numoptions, int row, int col){
         char opcion;
         int x,y;
@@ -244,5 +262,5 @@ private:
         HANDLE consoleHandle;
         WORD originalAttributes;
     #endif
-    
+
 };
