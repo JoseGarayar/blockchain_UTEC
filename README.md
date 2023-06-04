@@ -48,7 +48,6 @@ Falta completar (Use diagramas para una mejor claridad)
 #### **Chainhash**
 
 Falta completar (Indicar para que criterios de busqueda se utiliza)
-prueba git
 
 #### **BST (Binary Search Tree)**
 
