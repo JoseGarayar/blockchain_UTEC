@@ -1,9 +1,105 @@
-#include "src/blockchain.h"
-#include "src/CSV/CSVManager.h"
+
 #include <vector>
+#include "src/menuoptions/options.h"
+
 using namespace std;
 
 int main() {
+    Blockchain blockchain;
+    ConsoleWriter writer;    
+    char opcion;
+
+    while (true) {
+        writer.clearScreen();  // Limpiar la pantalla
+        
+        std::string opcionesMenu[] = {"1. Insertar Bloque",
+            "2. Gererar Blockchain desde archivo", 
+            "3. Buscar por Emisor", 
+            "4. Buscar por Receptor", 
+            "5. Buscar por Rango",             
+            "6. Buscar Máximo Monto",             
+            "7. Buscar Monto Mínimo",
+            "8. Recalculo en cascada",
+            "9. Salir"};
+        opcion = writer.createMenu("MENU PRINCIPAL",opcionesMenu,9,10,5);
+        switch (opcion) {
+            case '1':
+                // Opción 1: Insertar registro
+                writer.clearScreen();
+                writer.write(10, 5, "Opción 1 seleccionada: Insertar registro");
+                // Aquí puedes agregar el código correspondiente para insertar un registro
+                break;
+            case '2':
+                // Opción 2: Cargar desde archivo
+                opcion2CargarArchivo(blockchain, writer);
+                // Aquí puedes agregar el código correspondiente para cargar desde un archivo
+                break;
+            case '3':
+                // Opción 2: Cargar desde archivo
+                writer.clearScreen();
+                writer.write(10, 5, "Opción 2 seleccionada: Cargar desde archivo");
+                // Aquí puedes agregar el código correspondiente para cargar desde un archivo
+                break;
+            case '4':
+                // Opción 2: Cargar desde archivo
+                writer.clearScreen();
+                writer.write(10, 5, "Opción 2 seleccionada: Cargar desde archivo");
+                // Aquí puedes agregar el código correspondiente para cargar desde un archivo
+                break;
+            case '5':
+                // Opción 2: Cargar desde archivo
+                writer.clearScreen();
+                writer.write(10, 5, "Opción 2 seleccionada: Cargar desde archivo");
+                // Aquí puedes agregar el código correspondiente para cargar desde un archivo
+                break;
+            case '6':
+                // Opción 2: Cargar desde archivo
+                writer.clearScreen();
+                writer.write(10, 5, "Opción 2 seleccionada: Cargar desde archivo");
+                // Aquí puedes agregar el código correspondiente para cargar desde un archivo
+                break;
+            case '7':
+                // Opción 2: Cargar desde archivo
+                writer.clearScreen();
+                writer.write(10, 5, "Opción 2 seleccionada: Cargar desde archivo");
+                // Aquí puedes agregar el código correspondiente para cargar desde un archivo
+                break;
+            case '8':
+                // Opción 2: Cargar desde archivo
+                writer.clearScreen();
+                writer.write(10, 5, "Opción 2 seleccionada: Cargar desde archivo");
+                // Aquí puedes agregar el código correspondiente para cargar desde un archivo
+                break;
+            case '9':
+                // Opción 9: Salir
+                writer.clearScreen();
+                writer.write(10, 5, "Saliendo del programa...");
+                return 0;
+            default:
+                // Opción inválida
+                //writer.clearScreen();
+                writer.write(10, 15, "Opción inválida. Por favor, seleccione una opción válida.");
+                break;
+        }
+        
+        // Esperar a que el usuario presione una9 tecla para continuar
+        #ifdef _WIN32
+            //std::cout << "Presione cualquier tecla para continuar...";
+            _getch();
+        #else
+            //std::cout << "Presione Enter para continuar...";
+           // getch();
+            
+        #endif
+    }
+
+    return 0;
+}
+
+
+void pruebas(){
+
+/*
     Blockchain blockchain;
 
     std::vector<Transaction> transactions1;
@@ -120,9 +216,9 @@ int main() {
     for (vector<string> column: rows) {
         cout << column[0] + "\t" + column[1] + "\t" + column[2] + "\t" + column[3] + "\t" + column[4] << endl;
     }
+*/
 
 }
-
 
 
 
