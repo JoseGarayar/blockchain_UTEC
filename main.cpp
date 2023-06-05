@@ -1,4 +1,7 @@
 #include "src/blockchain.h"
+#include "src/CSV/CSVManager.h"
+#include <vector>
+using namespace std;
 
 int main() {
     Blockchain blockchain;
@@ -109,6 +112,14 @@ int main() {
     cout << "Nombre Destino: " << new_max.nombreDestino << endl;
     cout << "Importe : " << new_max.importe << endl;
     cout << "Fecha: " << new_max.fecha << endl;
+
+    cout << "Read CSV" << endl;
+    CSVManager manager;
+    vector<vector<string>> rows = manager.readFile("src/CSV/transactions.csv");
+    
+    for (vector<string> column: rows) {
+        cout << column[0] + "\t" + column[1] + "\t" + column[2] + "\t" + column[3] + "\t" + column[4] << endl;
+    }
 
 }
 
