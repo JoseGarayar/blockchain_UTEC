@@ -3,6 +3,7 @@
 #include <unordered_map>
 #include "circulardoublelist/circulardoublelist.h"
 #include "bst/bst.h"
+#include "heap/heap.h"
 
 using namespace std;
 
@@ -17,7 +18,10 @@ private:
     BSTree<string, pair<int,int>  > *bstreeFromName = new BSTree<string, pair<int,int> >();
     //indice BST para los nombrereceptor
     BSTree<string, pair<int,int>  > *bstreeToName = new BSTree<string, pair<int,int>  >();
-
+    // índice maxheap
+    MaxHeap<Transaction> maxHeap;
+    // índice minheap
+    MinHeap<Transaction> minHeap;
 public:
     typedef CircularDoubleListIterator<Block*> iterator;
 
@@ -39,6 +43,9 @@ public:
             bstreeFromName->insert (transaction.nombreOrigen, pair(index, i));
             bstreeToName->insert (transaction.nombreDestino, pair(index, i));
             i++;
+
+            maxHeap.insert(transaction);
+            minHeap.insert(transaction);
         }
         
         
@@ -58,11 +65,25 @@ public:
             bstreeAmount->remove(transaction.importe);
             bstreeFromName->remove(transaction.nombreOrigen);
             bstreeToName->remove(transaction.nombreDestino);
+
+            maxHeap.deleteNode(transaction);
+            minHeap.deleteNode(transaction);            
         }
 
         blockchain.remove(index);
         cascadeEffect();
         
+    }
+
+    void deleteNodeFromHeap(int index) {
+        if (index < 0 || index >= blockchain.size()) {
+            cout << "El bloque no existe" << endl;
+            return;
+        }
+
+        Block* block = blockchain[index];
+        maxHeap.deleteNode(block->getData()[0]);
+        minHeap.deleteNode(block->getData()[0]);
     }
 
     void updateDataBlock(int index, const vector<Transaction>& data) {
@@ -137,6 +158,16 @@ public:
             return it->second;
         }
         return nullptr;
+    }
+
+    // Complejidad O(1)
+    Transaction findMaxTransaction() {
+        return maxHeap.extractMax();
+    }
+
+    // Complejidad O(1)
+    Transaction findMinTransaction() {
+        return minHeap.extractMin();
     }
 
     vector<Transaction> findTransactionsByRangeof(double amountIni, double amountEnd){
