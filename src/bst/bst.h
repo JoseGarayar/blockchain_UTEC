@@ -268,7 +268,10 @@ class BSTree {
             if ( key < node->key ) _remove(node->left, key);
             else if ( key > node->key ) _remove(node->right, key);
             else if (node->left !=nullptr && node->right!=nullptr){
-                node->key = _findMin(node->right)->key;
+                NodeBT<TK, TV>* nodtmp= _findMin(node->right);
+                node->key = nodtmp->key;
+                node->value = nodtmp->value;
+
                 _remove (node->right, node->key);
             }
             else{

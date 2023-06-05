@@ -13,11 +13,11 @@ private:
     CircularDoubleList<Block*> blockchain;
     unordered_map<int, Block*> index;
     //indice BST para los importes
-    BSTree<double, int > *bstreeAmount = new BSTree<double, int>();
+    BSTree<double, pair<int,int> > *bstreeAmount = new BSTree<double, pair<int,int> >();
     //indice BST para los NombreEmisor
-    BSTree<string, int > *bstreeFromName = new BSTree<string, int>();
+    BSTree<string, pair<int,int>  > *bstreeFromName = new BSTree<string, pair<int,int> >();
     //indice BST para los nombrereceptor
-    BSTree<string, int > *bstreeToName = new BSTree<string, int >();
+    BSTree<string, pair<int,int>  > *bstreeToName = new BSTree<string, pair<int,int>  >();
     // índice maxheap
     MaxHeap<Transaction> maxHeap;
     // índice minheap
@@ -33,20 +33,21 @@ public:
         Block* newBlock = new Block(index, data, previousHash);
         blockchain.push_back(newBlock);        
 
-        /* Agregar insercion en estructuras de indices
-        for (const Transaction& transaction : data) {
-            index[transaction.idTransaccion] = newBlock;
-        }*/
-
+        // Agregar insercion en estructuras de indices
         // agrega los datos al indice BST
+    
+        int i = 0; 
         for ( Transaction& transaction : data) {
-            bstreeAmount->insert (transaction.importe, index);
-            bstreeFromName->insert (transaction.nombreOrigen, index);
-            bstreeToName->insert (transaction.nombreDestino, index);
+
+            bstreeAmount->insert (transaction.importe, pair(index, i));
+            bstreeFromName->insert (transaction.nombreOrigen, pair(index, i));
+            bstreeToName->insert (transaction.nombreDestino, pair(index, i));
+            i++;
 
             maxHeap.insert(transaction);
             minHeap.insert(transaction);
         }
+        
         
     }
 
@@ -90,6 +91,17 @@ public:
             cout << "El bloque no existe" << endl;
             return;
         }
+
+        /*
+            Eliminación indice anterior
+        */
+        int i=0;
+        for(Transaction ele : blockchain[index]->getData()) {             
+            bstreeAmount->remove(ele.importe);
+            bstreeFromName->remove(ele.nombreOrigen);
+            bstreeToName->remove(ele.nombreDestino);            
+        }
+
         if (index == 0) {
             blockchain[index]->update_block(index, data, defaultHash());
         } else {
@@ -97,16 +109,14 @@ public:
         }
         cascadeEffect();
         /*
-            Agregar actualizacion en estructuras de indices
+            Agregar nuevos indices
         */
-        for(Transaction ele : blockchain[index]->getData()) { 
-            bstreeAmount->remove(ele.importe);
-            bstreeFromName->remove(ele.nombreOrigen);
-            bstreeToName->remove(ele.nombreDestino);  
+        i=0;
+        for(Transaction ele : blockchain[index]->getData()) {             
 
-            bstreeAmount->insert (ele.importe, index);
-            bstreeFromName->insert (ele.nombreOrigen, index);
-            bstreeToName->insert (ele.nombreDestino, index);
+            bstreeAmount->insert (ele.importe, pair(index, i));
+            bstreeFromName->insert (ele.nombreOrigen, pair(index, i));
+            bstreeToName->insert (ele.nombreDestino, pair(index, i));
         }
     }
 
@@ -163,59 +173,48 @@ public:
     vector<Transaction> findTransactionsByRangeof(double amountIni, double amountEnd){
 
         vector<Transaction> result;
-        vector<pair<double, int>> arr = bstreeAmount->findRange(amountIni,amountEnd);
+        vector<pair<double, pair<int, int>>> arr = bstreeAmount->findRange(amountIni,amountEnd);
 
-        for (int i= 0; i< arr.size(); i++){
-            for(Transaction ele : blockchain[arr[i].second]->getData()) { 
-                if (ele.importe >= amountIni && ele.importe <=amountEnd){
-                    result.push_back(ele);
-                } 
-            }
+        for(auto ele : arr) { 
+             result.push_back(blockchain[ele.second.first]->getData()[ele.second.second]);
         }
+
         return result;
     }
 
     vector<Transaction> findTransactionsByFromName(string name){
 
         vector<Transaction> result;
-        vector<pair<string, int>> arr = bstreeFromName->findKey(name);
+        vector<pair<string, pair<int, int>>> arr = bstreeFromName->findKey(name);
 
-        for (int i= 0; i< arr.size(); i++){
-            for(Transaction ele : blockchain[arr[i].second]->getData()) { 
-                if (ele.nombreOrigen==name){
-                    result.push_back(ele);
-                } 
-            }
+        for(auto ele : arr) { 
+             result.push_back(blockchain[ele.second.first]->getData()[ele.second.second]);
         }
+
         return result;
     }
 
     vector<Transaction> findTransactionsByToName(string name){
 
         vector<Transaction> result;
-        vector<pair<string, int>> arr = bstreeToName->findKey(name);
+        vector<pair<string, pair<int, int>>> arr = bstreeToName->findKey(name);
+        
 
-        for (int i= 0; i< arr.size(); i++){
-            for(Transaction ele : blockchain[arr[i].second]->getData()) { 
-                if (ele.nombreOrigen==name){
-                    result.push_back(ele);
-                } 
-            }
+        for(auto ele : arr) { 
+             result.push_back(blockchain[ele.second.first]->getData()[ele.second.second]);
         }
+
         return result;
     }
 
     vector<Transaction> findTransactionsByFromNameBeginWith(string name){
 
-        vector<Transaction> result;
-        vector<pair<string, int>> arr = bstreeFromName->findKeyBeginWith(name);
-         for (int i= 0; i< arr.size(); i++){
-            for(Transaction ele : blockchain[arr[i].second]->getData()) { 
-                if (ele.nombreOrigen.substr(0,name.size())==name){
-                    result.push_back(ele);
-                } 
-            }
+        vector<Transaction> result;        
+        vector<pair<string, pair<int, int>>> arr = bstreeFromName->findKeyBeginWith(name);
+        for(auto ele : arr) { 
+             result.push_back(blockchain[ele.second.first]->getData()[ele.second.second]);
         }
+
         return result;
         
     }
