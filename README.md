@@ -257,14 +257,16 @@ Falta completar
 
 ## 9. Anexar al informe la lista de actividades concluidas por cada integrante del grupo
 
-Jose Garayar:
+Jose Garayar
 
 - Investigar libreria OpenSSL y funcion hash de encriptacion SHA-256 para implementar funcion de cálculo de hash para bloques del blockchain.
 - Investigar y aplicar concepto de prueba de trabajo.
 - Implementar función de efecto cascada.
 - Implementar función eliminar bloque y actualizar data del bloque para menú del blockchain.
+- Implementar estructura de datos "Hash Table".
+- Usar estructura de datos "Hash Table" para indexación de criterio de búsqueda "Igual a X", esto se actualiza al agregar, actualizar o eliminar bloque.
 - Crear estructura de informe final en el archivo README del proyecto
-- Crear tareas para cada miembro del grupo en Github Project Boards. Enlace: https://github.com/users/JoseGarayar/projects/1/views/1?layout=board
+- Crear tareas para cada miembro del grupo en [Board de Github Project](https://github.com/users/JoseGarayar/projects/1/views/1?layout=board).
 ![github_project_board](https://github.com/JoseGarayar/blockchain_UTEC/assets/53947785/398348b6-91e1-4aab-b1e7-d9560d224b9d)
 
 Roberth Ramos
@@ -290,6 +292,6 @@ Juan José Granados
 Carlos Villanueva
 
 - Implementar estructura de datos "Hash Table".
-- Usar estructura de datos "Hash Tabke" para indexación de criterio de búsqueda "Igual a X", esto se actualiza al agregar, actualizar o eliminar bloque.
+- Usar estructura de datos "Hash Table" para indexación de criterio de búsqueda "Igual a X", esto se actualiza al agregar, actualizar o eliminar bloque.
 - Agregar información de las estructuras de datos al informe.
 - Elaborar presentación PowerPoint del proyecto.
