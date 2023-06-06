@@ -4,6 +4,7 @@
 #include "circulardoublelist/circulardoublelist.h"
 #include "bst/bst.h"
 #include "hashtable/hashtable.h"
+#include "heap/heap.h"
 
 using namespace std;
 
@@ -21,6 +22,10 @@ private:
     HashTable<string, Pair<int, int> > hashTableFromName;
     //indice Hash Table para NombreReceptor (igual a X) 
     HashTable<string, Pair<int, int> > hashTableToName;
+    // índice maxheap
+    MaxHeap<Transaction> maxHeap;
+    // índice minheap
+    MinHeap<Transaction> minHeap;
 
 public:
     typedef CircularDoubleListIterator<Block*> iterator;
@@ -46,6 +51,9 @@ public:
             hashTableFromName.insert(transaction.nombreOrigen, Pair<int, int>(index, i));
             hashTableToName.insert(transaction.nombreDestino, Pair<int, int>(index, i));
             i++;
+
+            maxHeap.insert(transaction);
+            minHeap.insert(transaction);
         }
         
     }
@@ -68,11 +76,25 @@ public:
             // Hash Table
             hashTableFromName.remove(transaction.nombreOrigen);
             hashTableToName.remove(transaction.nombreDestino);
+
+            maxHeap.deleteNode(transaction);
+            minHeap.deleteNode(transaction);            
         }
 
         blockchain.remove(index);
         cascadeEffect();
         
+    }
+
+    void deleteNodeFromHeap(int index) {
+        if (index < 0 || index >= blockchain.size()) {
+            cout << "El bloque no existe" << endl;
+            return;
+        }
+
+        Block* block = blockchain[index];
+        maxHeap.deleteNode(block->getData()[0]);
+        minHeap.deleteNode(block->getData()[0]);
     }
 
     void updateDataBlock(int index, const vector<Transaction>& data) {
@@ -146,6 +168,16 @@ public:
         }
         
         return true;
+    }
+
+    // Complejidad O(1)
+    Transaction findMaxTransaction() {
+        return maxHeap.extractMax();
+    }
+
+    // Complejidad O(1)
+    Transaction findMinTransaction() {
+        return minHeap.extractMin();
     }
 
     vector<Transaction> findTransactionsByRangeof(double amountIni, double amountEnd){

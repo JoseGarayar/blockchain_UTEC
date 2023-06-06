@@ -7,8 +7,7 @@ Este proyecto del curso de estructura de datos - maestría UTEC 2023 consiste en
 El grupo esta conformado por los alumnos:
 - Jose Garayar
 - Roberth Ramos
-- Juan Granados
-- Cristian Celadita
+- Juan José Granados
 - Carlos Villanueva
 
 ## 2. Descripción del caso de estudio planteado por el grupo
@@ -55,7 +54,7 @@ Falta completar (Indicar para que criterios de busqueda se utiliza)
 
 #### **Heap**
 
-Falta completar (Indicar para que criterios de busqueda se utiliza)
+Para realizar búsqueda del máximo y mínimo importe transferido se utilizó la estructura de datos `Heap`, `MaxHeap` y `MinHeap` para obtener el máximo y mínimo importe respectivamente con una complejidad de O(1).
 
 ## 6. Análisis de la complejidad en notación Big O de los métodos del Blockchain.
 
@@ -91,18 +90,17 @@ Roberth Ramos
 - Usar estructura de datos "BST" para indexación de criterios de búsqueda "Entre X y Y" e "Inicia con", esto se actualiza al agregar, actualizar o eliminar bloque.
 - Agregar información de las estructuras de datos al informe.
 - Elaborar presentación PowerPoint del proyecto.
+- Crear aplicación de menú por consola.
 
-Juan Granados
+Juan José Granados
 
 - Implementar estructura de datos "Heap".
 - Usar estructura de datos "Heap" para indexación de criterios de búsqueda "Máximo valor" y "Mínimo valor", esto se actualiza al agregar, actualizar o eliminar bloque.
-- Agregar información de las estructuras de datos al informe.
-
-Cristian Celadita
-
-- Crear aplicación de menú por consola.
+- Implementar método para eliminar un elemento del Heap.
 - Implementar función para carga de datos desde archivo csv.
 - Generar archivo csv con data de transacciones financieras.
+- [Board de Github Project](https://github.com/users/JoseGarayar/projects/1/views/1?layout=board)
+
 
 Carlos Villanueva
 

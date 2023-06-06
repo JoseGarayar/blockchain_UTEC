@@ -10,19 +10,20 @@
 
 #include <iostream>
 #include <vector>
+
 using namespace std;
 
-template <typename T>
+template <typename Transactions>
 class MaxHeap {
 private:
-    vector<T> heapArray;
+    vector<Transactions> heapArray;
     int heapSize;
 
     void heapifyUp(int index) {
         int parent = (index - 1) / 2;
 
         while (index > 0 && heapArray[index] > heapArray[parent]) {
-            std::swap(heapArray[index], heapArray[parent]);
+            swap(heapArray[index], heapArray[parent]);
             index = parent;
             parent = (index - 1) / 2;
         }
@@ -40,7 +41,7 @@ private:
             largest = rightChild;
 
         if (largest != index) {
-            std::swap(heapArray[index], heapArray[largest]);
+            swap(heapArray[index], heapArray[largest]);
             heapifyDown(largest);
         }
     }
@@ -52,42 +53,61 @@ public:
         return heapSize == 0;
     }
 
-    void insert(const T& item) {
+    void insert(const Transactions& item) {
         heapArray.push_back(item);
         heapSize++;
         heapifyUp(heapSize - 1);
     }
 
-    T extractMax() {
+    Transactions extractMax() {
         if (isEmpty())
-            throw std::out_of_range("MaxHeap is empty");
+            throw out_of_range("MaxHeap is empty");
 
-        T maxItem = heapArray[0];
-        std::swap(heapArray[0], heapArray[heapSize - 1]);
+        Transactions maxItem = heapArray[0];
+        swap(heapArray[0], heapArray[heapSize - 1]);
         heapSize--;
         heapifyDown(0);
 
         return maxItem;
     }
+
+    void deleteNode(const Transaction& item) {
+        auto iter = find(heapArray.begin(), heapArray.end(), item); // O(n)
+        if (iter == heapArray.end()) {
+            out_of_range("Node not found");
+        }
+
+        swap(*iter, heapArray[heapSize - 1]); // O(1)
+        heapArray.pop_back();
+        heapSize--;
+
+        if (item > *iter) {
+            heapifyUp(iter - heapArray.begin()); // O(log n)
+        } else {
+            heapifyDown(iter - heapArray.begin()); // O(log n)
+        }
+    }
+
+    
 };
 
-template <typename T>
+template <typename Transactions>
 class MinHeap {
 private:
-    vector<T> heapArray;
+    vector<Transactions> heapArray;
     int heapSize;
 
-    void heapifyUp(int index) {
+    void heapifyUp(int index) { // O(log n)
         int parent = (index - 1) / 2;
 
         while (index > 0 && heapArray[index] < heapArray[parent]) {
-            std::swap(heapArray[index], heapArray[parent]);
+            swap(heapArray[index], heapArray[parent]);
             index = parent;
             parent = (index - 1) / 2;
         }
     }
 
-    void heapifyDown(int index) {
+    void heapifyDown(int index) { // O(log n)
         int leftChild = 2 * index + 1;
         int rightChild = 2 * index + 2;
         int smallest = index;
@@ -99,7 +119,7 @@ private:
             smallest = rightChild;
 
         if (smallest != index) {
-            std::swap(heapArray[index], heapArray[smallest]);
+            swap(heapArray[index], heapArray[smallest]);
             heapifyDown(smallest);
         }
     }
@@ -111,26 +131,41 @@ public:
         return heapSize == 0;
     }
 
-    void insert(const T& item) {
-        heapArray.push_back(item);
+    void insert(const Transactions& item) {
+        heapArray.push_back(item); // O(1)
         heapSize++;
-        heapifyUp(heapSize - 1);
+        heapifyUp(heapSize - 1); // O(log n)
     }
 
-    T extractMin() {
+    Transactions extractMin() {
         if (isEmpty())
-            throw std::out_of_range("MinHeap is empty");
+            throw out_of_range("MinHeap is empty");
 
-        T minItem = heapArray[0];
-        std::swap(heapArray[0], heapArray[heapSize - 1]);
+        Transactions minItem = heapArray[0];
+        swap(heapArray[0], heapArray[heapSize - 1]); // O(1)
         heapSize--;
-        heapifyDown(0);
+        heapifyDown(0); // O(log n)
 
         return minItem;
     }
+
+    void deleteNode(const Transaction& item) {
+        auto iter = find(heapArray.begin(), heapArray.end(), item); // O(n)
+        if (iter == heapArray.end()) {
+            throw out_of_range("Node not found");
+        }
+
+        swap(*iter, heapArray[heapSize - 1]); // O(1)
+        heapArray.pop_back();
+        heapSize--;
+
+        if (item < *iter) {
+            heapifyUp(iter - heapArray.begin()); // O(log n)
+        } else {
+            heapifyDown(iter - heapArray.begin()); // O(log n)
+        }
+    }
+    
 };
-
-
-
 
 #endif /* Heap_h */
