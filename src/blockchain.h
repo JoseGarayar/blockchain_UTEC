@@ -138,16 +138,16 @@ public:
         }
     }
 
-    void cascadeEffect() {
+    void cascadeEffect(bool mine = false) {
         CircularDoubleList<Block*>::iterator ite = blockchain.begin();
         CircularDoubleList<Block*>::iterator ite_prev = blockchain.begin();
         int i = 0;
         for(; ite != blockchain.end(); ++ite){
             if (i == 0) {
-                (*ite)->update_block(i, (*ite)->getData(), defaultHash());
+                (*ite)->update_block(i, (*ite)->getData(), defaultHash(), mine=mine);
                 ite_prev = ite;
             } else {
-                (*ite)->update_block(i, (*ite)->getData(), (*ite_prev)->getHash());
+                (*ite)->update_block(i, (*ite)->getData(), (*ite_prev)->getHash(), mine=mine);
                 ++ite_prev;
             }
             i++;

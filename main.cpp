@@ -95,9 +95,7 @@ int main() {
                 break;
             case '8':
                 // Recalculo en cascada
-                writer.clearScreen();
-                writer.write(10, 5, "Opción 2 seleccionada: Cargar desde archivo");
-                // Aquí puedes agregar el código correspondiente para cargar desde un archivo
+                recalculoCascada(blockchain, writer);
                 break;
             case '9':
                 // Salir

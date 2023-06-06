@@ -385,3 +385,14 @@ void buscarMontoMinimo(Blockchain & blockchain, ConsoleWriter writer){
 
     writer.getchr();
 }
+
+void recalculoCascada(Blockchain & blockchain, ConsoleWriter writer) {
+    writer.clearScreen();
+    writer.write(2,10,"Recalculo en cascada");
+    writer.write(4,5,"Se esta corrigiendo los hash de todos los bloques...");
+    bool mine = true;
+    blockchain.cascadeEffect(mine=mine);
+    writer.write(6,5,"Se culminó el proceso");
+    writer.write(7,5,"Presione cualquier tecla para regresar al menu");
+    writer.getchr();
+}
