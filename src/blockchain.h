@@ -12,8 +12,8 @@ class Blockchain {
 private:
     
     CircularDoubleList<Block*> blockchain;
-    //indice BST para los importes
-    BSTree<double, pair<int,int> > *bstreeAmount = new BSTree<double, pair<int,int> >();
+    //indice BST para fechas
+    BSTree<string, pair<int,int> > *bstreeDates = new BSTree<string, pair<int,int> >();
     //indice BST para los NombreEmisor
     BSTree<string, pair<int,int>  > *bstreeFromName = new BSTree<string, pair<int,int> >();
     //indice BST para los nombrereceptor
@@ -44,7 +44,7 @@ public:
         int i = 0; 
         for ( Transaction& transaction : data) {
             // BST
-            bstreeAmount->insert (transaction.importe, make_pair(index, i));
+            bstreeDates->insert (transaction.fecha, make_pair(index, i));
             bstreeFromName->insert (transaction.nombreOrigen, make_pair(index, i));
             bstreeToName->insert (transaction.nombreDestino, make_pair(index, i));
             // Hash Table
@@ -70,7 +70,7 @@ public:
         Block* block = blockchain[index];
         for ( Transaction& transaction : block->getData()) {
             // BST
-            bstreeAmount->remove(transaction.importe);
+            bstreeDates->remove(transaction.fecha);
             bstreeFromName->remove(transaction.nombreOrigen);
             bstreeToName->remove(transaction.nombreDestino);
             // Hash Table
@@ -109,12 +109,15 @@ public:
         int i=0;
         for(Transaction ele : blockchain[index]->getData()) {  
             // BST           
-            bstreeAmount->remove(ele.importe);
+            bstreeDates->remove(ele.fecha);
             bstreeFromName->remove(ele.nombreOrigen);
             bstreeToName->remove(ele.nombreDestino);
             // Hash Table
             hashTableFromName.remove(ele.nombreOrigen);
             hashTableToName.remove(ele.nombreDestino);
+            // Max y Min Heap
+            maxHeap.deleteNode(ele);
+            minHeap.deleteNode(ele);
         }
 
         if (index == 0) {
@@ -129,25 +132,28 @@ public:
         i=0;
         for(Transaction ele : blockchain[index]->getData()) {             
             // BST
-            bstreeAmount->insert (ele.importe, make_pair(index, i));
+            bstreeDates->insert (ele.fecha, make_pair(index, i));
             bstreeFromName->insert (ele.nombreOrigen, make_pair(index, i));
             bstreeToName->insert (ele.nombreDestino, make_pair(index, i));
             // Hash Table
             hashTableFromName.insert(ele.nombreOrigen, Pair<int, int>(index, i));
             hashTableToName.insert(ele.nombreDestino, Pair<int, int>(index, i));
+            // Max y Min Heap
+            maxHeap.insert(ele);
+            minHeap.insert(ele);
         }
     }
 
-    void cascadeEffect() {
+    void cascadeEffect(bool mine = false) {
         CircularDoubleList<Block*>::iterator ite = blockchain.begin();
         CircularDoubleList<Block*>::iterator ite_prev = blockchain.begin();
         int i = 0;
         for(; ite != blockchain.end(); ++ite){
             if (i == 0) {
-                (*ite)->update_block(i, (*ite)->getData(), defaultHash());
+                (*ite)->update_block(i, (*ite)->getData(), defaultHash(), mine=mine);
                 ite_prev = ite;
             } else {
-                (*ite)->update_block(i, (*ite)->getData(), (*ite_prev)->getHash());
+                (*ite)->update_block(i, (*ite)->getData(), (*ite_prev)->getHash(), mine=mine);
                 ++ite_prev;
             }
             i++;
@@ -180,10 +186,10 @@ public:
         return minHeap.extractMin();
     }
 
-    vector<Transaction> findTransactionsByRangeof(double amountIni, double amountEnd){
+    vector<Transaction> findTransactionsByRangeof(string dateIni, string dateEnd){
 
         vector<Transaction> result;
-        vector<pair<double, pair<int, int>>> arr = bstreeAmount->findRange(amountIni,amountEnd);
+        vector<pair<string, pair<int, int>>> arr = bstreeDates->findRange(dateIni,dateEnd);
 
         for(auto ele : arr) { 
              result.push_back(blockchain[ele.second.first]->getData()[ele.second.second]);
@@ -241,6 +247,10 @@ public:
     iterator end(){
         return blockchain.end();
     }   
+
+    void clear(){
+        blockchain.clear();
+    }
 
     ~Blockchain() {
         blockchain.clear();

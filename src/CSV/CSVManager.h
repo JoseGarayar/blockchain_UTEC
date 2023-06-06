@@ -40,7 +40,7 @@ public:
         openFile(filePath);
         string line;
         vector<vector<string>> rows;
-        
+        getline(file, line);
         while (getline(file, line)) {
             vector<string> row = splitString(line, ',');
             rows.push_back(row);

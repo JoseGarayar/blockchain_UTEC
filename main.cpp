@@ -1,9 +1,133 @@
-#include "src/blockchain.h"
-#include "src/CSV/CSVManager.h"
+
 #include <vector>
+#include "src/menuoptions//options.h"
+
 using namespace std;
 
 int main() {
+    Blockchain blockchain;
+    ConsoleWriter writer;    
+    char opcion;
+    char opcionEmisorReceptor;
+    string opcionesMenuBloque[] = {
+        "1. Insertar bloque",
+        "2. Borrar bloque",
+        "3. Actualizar transacciones bloque",
+        "4. Regresar al menu principal"
+    };
+    string opcionesMenuEmisorReceptor[] = {
+        "1. Buscar por emisor",
+        "2. Buscar por receptor",
+        "3. Regresar al menu principal"
+    };
+
+    while (true) {
+        writer.clearScreen();  // Limpiar la pantalla
+        
+        std::string opcionesMenu[] = {
+            "1. Insertar, borrar o actualizar Bloque",
+            "2. Generar Blockchain desde archivo", 
+            "3. Mostrar Blockchain",
+            "4. Buscar por Emisor o Receptor",             
+            "5. Buscar por Rango",             
+            "6. Buscar por Monto Máximo",             
+            "7. Buscar por Monto Mínimo",
+            "8. Recalculo en cascada",
+            "9. Salir"
+        };
+
+        opcion = writer.createMenu("MENU PRINCIPAL",opcionesMenu,9,10,5);
+        switch (opcion) {
+            case '1':
+                // Insertar, borrar o actualizar Bloque
+                writer.clearScreen();
+                writer.write(10, 5, "Insertar, borrar o actualizar Bloque");
+                opcionEmisorReceptor = writer.createMenu("SELECCIONAR UNA OPCION", opcionesMenuBloque, 4, 12, 5);
+                if (opcionEmisorReceptor == '1') {
+                    InsertarBloque(blockchain, writer);
+                }
+                if (opcionEmisorReceptor == '2') {
+                    borrarBloque(blockchain, writer);
+                }
+                if (opcionEmisorReceptor == '3') {
+                    actualizarBloque(blockchain, writer);
+                }
+                if (opcionEmisorReceptor == '4') {
+                    break;
+                }
+                break;
+            case '2':
+                // Cargar desde archivo csv
+                cargarArchivoCSV(blockchain, writer);
+                break;
+            case '3':
+                // Mostrar Blockchain
+                displaychain(blockchain, writer);
+                break;
+            case '4':
+                // Buscar por Emisor o Receptor
+                writer.clearScreen();
+                writer.write(10, 5, "Buscar por emisor o receptor");
+                opcionEmisorReceptor = writer.createMenu("SELECCIONAR UNA OPCION", opcionesMenuEmisorReceptor, 3, 12, 5);
+                if (opcionEmisorReceptor == '1') {
+                    buscarPorEmisor(blockchain, writer);
+                }
+                if (opcionEmisorReceptor == '2') {
+                    buscarPorReceptor(blockchain, writer);
+                }
+                if (opcionEmisorReceptor == '3') {
+                    break;
+                }
+                break;
+            case '5':
+                // Buscar por Rango
+                //writer.clearScreen();
+                //writer.write(10, 5, "Opción 2 seleccionada: Cargar desde archivo");                
+                opcionBuscarRangoFechas(blockchain,writer);
+                // Aquí puedes agregar el código correspondiente para cargar desde un archivo
+                break;
+            case '6':
+                // Buscar por Monto Máximo
+                buscarMontoMaximo(blockchain, writer);
+                break;
+            case '7':
+                // Buscar por Monto Mínimo
+                buscarMontoMinimo(blockchain, writer);
+                break;
+            case '8':
+                // Recalculo en cascada
+                recalculoCascada(blockchain, writer);
+                break;
+            case '9':
+                // Salir
+                writer.clearScreen();
+                writer.write(10, 5, "Saliendo del programa...");
+                return 0;
+            default:
+                // Opción inválida
+                //writer.clearScreen();
+                writer.write(10, 15, "Opción inválida. Por favor, seleccione una opción válida.");
+                break;
+        }
+        
+        // Esperar a que el usuario presione una9 tecla para continuar
+        #ifdef _WIN32
+            //std::cout << "Presione cualquier tecla para continuar...";
+            _getch();
+        #else
+            //std::cout << "Presione Enter para continuar...";
+           // getch();
+            
+        #endif
+    }
+
+    return 0;
+}
+
+
+void pruebas(){
+
+/*
     Blockchain blockchain;
 
     std::vector<Transaction> transactions1;
@@ -52,7 +176,7 @@ int main() {
             cout << endl;                   
     }
 
-    cout<< "Busqueda por Nombre Emisor" << endl;
+    cout<< "Busqued-a por Nombre Emisor" << endl;
 
     vec =  blockchain.findTransactionsByFromName("Alice"); 
     for(auto ele : vec) {        
@@ -120,9 +244,9 @@ int main() {
     for (vector<string> column: rows) {
         cout << column[0] + "\t" + column[1] + "\t" + column[2] + "\t" + column[3] + "\t" + column[4] << endl;
     }
+*/
 
 }
-
 
 
 

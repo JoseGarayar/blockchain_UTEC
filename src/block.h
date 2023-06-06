@@ -105,11 +105,11 @@ public:
         return (this->hash==mineBlock());
     }
 
-    void update_block(int index, const vector<Transaction>& data, const string& previousHash) {
+    void update_block(int index, const vector<Transaction>& data, const string& previousHash, bool mine = false) {
         this->index = index;
         this->data = data;
         this->previousHash = previousHash;
-        this->hash = mineBlock();
+        this->hash = mine ? mineBlock(): calculateHash(this->index, this->data, this->previousHash, this->nonce);
     }
 
     void displayBlock() {
