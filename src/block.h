@@ -15,6 +15,19 @@ struct Transaction {
     string fecha;
 };
 
+// Comparison operators as non-member functions
+bool operator<(const Transaction& lhs, const Transaction& rhs) {
+    return lhs.importe < rhs.importe;
+}
+
+bool operator>(const Transaction& lhs, const Transaction& rhs) {
+    return lhs.importe > rhs.importe;
+}
+
+bool operator==(const Transaction& lhs, const Transaction& rhs) {
+    return lhs.importe == rhs.importe;
+}
+
 class Block {
 private:
     int index;

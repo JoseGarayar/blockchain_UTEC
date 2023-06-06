@@ -1,4 +1,7 @@
 #include "src/blockchain.h"
+#include "src/CSV/CSVManager.h"
+#include <vector>
+using namespace std;
 
 int main() {
     Blockchain blockchain;
@@ -16,6 +19,7 @@ int main() {
     std::vector<Transaction> transactions3;
     transactions3.push_back({4, "Karl", "Bob", 250.0, "2023-05-26"});
     transactions3.push_back({5, "John", "Karl", 350.0, "2023-05-27"});
+    transactions3.push_back({7, "Juanjo", "Robert", 450.0, "2023-05-30"});
     blockchain.addBlock(transactions3);
 
     blockchain.displayChain();
@@ -80,6 +84,41 @@ int main() {
             cout << "  Importe: " << ele.importe << endl;
             cout << "  Fecha: " << ele.fecha << endl;
             cout << endl;                   
+    }
+
+    cout << "Transacción máxima" << endl;
+    Transaction max = blockchain.findMaxTransaction();
+    cout << "ID: " << max.idTransaccion << endl;
+    cout << "Nombre Origen: " << max.nombreOrigen << endl;
+    cout << "Nombre Destino: " << max.nombreDestino << endl;
+    cout << "Importe : " << max.importe << endl;
+    cout << "Fecha: " << max.fecha << endl;
+
+    cout << "Transacción mínima" << endl;
+    Transaction min = blockchain.findMinTransaction();
+    cout << "ID: " << min.idTransaccion << endl;
+    cout << "Nombre Origen: " << min.nombreOrigen << endl;
+    cout << "Nombre Destino: " << min.nombreDestino << endl;
+    cout << "Importe : " << min.importe << endl;
+    cout << "Fecha: " << min.fecha << endl;
+
+    cout << "Eliminar un nodo" << endl;
+    blockchain.deleteNodeFromHeap(0);
+
+    cout << "Nueva Transacción máxima" << endl;
+    Transaction new_max = blockchain.findMaxTransaction();
+    cout << "ID: " << new_max.idTransaccion << endl;
+    cout << "Nombre Origen: " << new_max.nombreOrigen << endl;
+    cout << "Nombre Destino: " << new_max.nombreDestino << endl;
+    cout << "Importe : " << new_max.importe << endl;
+    cout << "Fecha: " << new_max.fecha << endl;
+
+    cout << "Read CSV" << endl;
+    CSVManager manager;
+    vector<vector<string>> rows = manager.readFile("src/CSV/transactions.csv");
+    
+    for (vector<string> column: rows) {
+        cout << column[0] + "\t" + column[1] + "\t" + column[2] + "\t" + column[3] + "\t" + column[4] << endl;
     }
 
 }
