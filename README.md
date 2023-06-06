@@ -32,7 +32,7 @@ En el contexto de un blockchain, cada bloque de transacciones se puede represent
 
 Aquí hay una representación visual de la estructura de la lista circular doblemente enlazada en un blockchain:
 
-![Blockchain](https://github.com/JoseGarayar/blockchain_UTEC/assets/134245641/95ff93e6-f58d-40f0-9e9c-524a9c4af3a8)
+![Blockchain](https://github.com/JoseGarayar/blockchain_UTEC/assets/134245641/6ff77588-10d5-4bd2-a309-174c8c21255e)
 
 
 
