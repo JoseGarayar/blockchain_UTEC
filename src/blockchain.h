@@ -3,6 +3,7 @@
 #include <unordered_map>
 #include "circulardoublelist/circulardoublelist.h"
 #include "bst/bst.h"
+#include "hashtable/hashtable.h"
 #include "heap/heap.h"
 
 using namespace std;
@@ -11,17 +12,21 @@ class Blockchain {
 private:
     
     CircularDoubleList<Block*> blockchain;
-    unordered_map<int, Block*> index;
     //indice BST para los importes
     BSTree<double, pair<int,int> > *bstreeAmount = new BSTree<double, pair<int,int> >();
     //indice BST para los NombreEmisor
     BSTree<string, pair<int,int>  > *bstreeFromName = new BSTree<string, pair<int,int> >();
     //indice BST para los nombrereceptor
     BSTree<string, pair<int,int>  > *bstreeToName = new BSTree<string, pair<int,int>  >();
+    //indice Hash Table para NombreEmisor (igual a X) 
+    HashTable<string, Pair<int, int> > hashTableFromName;
+    //indice Hash Table para NombreReceptor (igual a X) 
+    HashTable<string, Pair<int, int> > hashTableToName;
     // índice maxheap
     MaxHeap<Transaction> maxHeap;
     // índice minheap
     MinHeap<Transaction> minHeap;
+
 public:
     typedef CircularDoubleListIterator<Block*> iterator;
 
@@ -38,16 +43,18 @@ public:
     
         int i = 0; 
         for ( Transaction& transaction : data) {
-
-            bstreeAmount->insert (transaction.importe, pair(index, i));
-            bstreeFromName->insert (transaction.nombreOrigen, pair(index, i));
-            bstreeToName->insert (transaction.nombreDestino, pair(index, i));
+            // BST
+            bstreeAmount->insert (transaction.importe, make_pair(index, i));
+            bstreeFromName->insert (transaction.nombreOrigen, make_pair(index, i));
+            bstreeToName->insert (transaction.nombreDestino, make_pair(index, i));
+            // Hash Table
+            hashTableFromName.insert(transaction.nombreOrigen, Pair<int, int>(index, i));
+            hashTableToName.insert(transaction.nombreDestino, Pair<int, int>(index, i));
             i++;
 
             maxHeap.insert(transaction);
             minHeap.insert(transaction);
         }
-        
         
     }
 
@@ -62,9 +69,13 @@ public:
         */
         Block* block = blockchain[index];
         for ( Transaction& transaction : block->getData()) {
+            // BST
             bstreeAmount->remove(transaction.importe);
             bstreeFromName->remove(transaction.nombreOrigen);
             bstreeToName->remove(transaction.nombreDestino);
+            // Hash Table
+            hashTableFromName.remove(transaction.nombreOrigen);
+            hashTableToName.remove(transaction.nombreDestino);
 
             maxHeap.deleteNode(transaction);
             minHeap.deleteNode(transaction);            
@@ -96,10 +107,14 @@ public:
             Eliminación indice anterior
         */
         int i=0;
-        for(Transaction ele : blockchain[index]->getData()) {             
+        for(Transaction ele : blockchain[index]->getData()) {  
+            // BST           
             bstreeAmount->remove(ele.importe);
             bstreeFromName->remove(ele.nombreOrigen);
-            bstreeToName->remove(ele.nombreDestino);            
+            bstreeToName->remove(ele.nombreDestino);
+            // Hash Table
+            hashTableFromName.remove(ele.nombreOrigen);
+            hashTableToName.remove(ele.nombreDestino);
         }
 
         if (index == 0) {
@@ -113,10 +128,13 @@ public:
         */
         i=0;
         for(Transaction ele : blockchain[index]->getData()) {             
-
-            bstreeAmount->insert (ele.importe, pair(index, i));
-            bstreeFromName->insert (ele.nombreOrigen, pair(index, i));
-            bstreeToName->insert (ele.nombreDestino, pair(index, i));
+            // BST
+            bstreeAmount->insert (ele.importe, make_pair(index, i));
+            bstreeFromName->insert (ele.nombreOrigen, make_pair(index, i));
+            bstreeToName->insert (ele.nombreDestino, make_pair(index, i));
+            // Hash Table
+            hashTableFromName.insert(ele.nombreOrigen, Pair<int, int>(index, i));
+            hashTableToName.insert(ele.nombreDestino, Pair<int, int>(index, i));
         }
     }
 
@@ -152,14 +170,6 @@ public:
         return true;
     }
 
-    Block* findBlockByTransactionId(int idTransaccion) {
-        auto it = index.find(idTransaccion);
-        if (it != index.end()) {
-            return it->second;
-        }
-        return nullptr;
-    }
-
     // Complejidad O(1)
     Transaction findMaxTransaction() {
         return maxHeap.extractMax();
@@ -183,27 +193,20 @@ public:
     }
 
     vector<Transaction> findTransactionsByFromName(string name){
-
         vector<Transaction> result;
-        vector<pair<string, pair<int, int>>> arr = bstreeFromName->findKey(name);
-
-        for(auto ele : arr) { 
-             result.push_back(blockchain[ele.second.first]->getData()[ele.second.second]);
+        forward_list<Pair<int, int>> forwardListFromName = hashTableFromName.find(name);
+        for(auto ele : forwardListFromName) { 
+             result.push_back(blockchain[ele.first]->getData()[ele.second]);
         }
-
         return result;
     }
 
     vector<Transaction> findTransactionsByToName(string name){
-
         vector<Transaction> result;
-        vector<pair<string, pair<int, int>>> arr = bstreeToName->findKey(name);
-        
-
-        for(auto ele : arr) { 
-             result.push_back(blockchain[ele.second.first]->getData()[ele.second.second]);
+        forward_list<Pair<int, int>> forwardListToName = hashTableToName.find(name);
+        for(auto ele : forwardListToName) { 
+             result.push_back(blockchain[ele.first]->getData()[ele.second]);
         }
-
         return result;
     }
 
