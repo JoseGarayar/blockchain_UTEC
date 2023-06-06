@@ -52,13 +52,15 @@ Cada bloque creado sera introducido en el blockchain (lista circular doblemente 
 
 En un blockchain, la técnica de Prueba de Trabajo (Proof of Work, PoW) se utiliza como mecanismo de consenso para validar transacciones y asegurar la integridad de la cadena de bloques. Hay varias implementaciones de Prueba de Trabajo, pero las más comunes son las siguientes:
 
-1. Hashcash: Hashcash fue la primera implementación de Prueba de Trabajo utilizada en el protocolo de correo electrónico para prevenir el spam. En Hashcash, se requiere que los participantes encuentren un nonce (número arbitrario utilizado solo una vez) que, al ser aplicado a una función hash criptográfica, genere un valor hash que cumpla con ciertos requisitos, como tener un cierto número de ceros iniciales. La dificultad se puede ajustar mediante la variación de la cantidad de ceros requeridos.
+| Opcion | Descripcion |
+| ------ | ----------- |
+| Hashcash |  Hashcash fue la primera implementación de Prueba de Trabajo utilizada en el protocolo de correo electrónico para prevenir el spam. En Hashcash, se requiere que los participantes encuentren un nonce (número arbitrario utilizado solo una vez) que, al ser aplicado a una función hash criptográfica, genere un valor hash que cumpla con ciertos requisitos, como tener un cierto número de ceros iniciales. La dificultad se puede ajustar mediante la variación de la cantidad de ceros requeridos.|
 
-2. Bitcoin PoW: Bitcoin utiliza una variante de la Prueba de Trabajo basada en Hashcash. En este caso, los mineros deben encontrar un nonce que, junto con otros datos, genere un hash que cumpla con una dificultad específica. La dificultad se ajusta periódicamente para mantener el tiempo promedio de bloqueo en aproximadamente 10 minutos.
+| Bitcoin PoW | Bitcoin utiliza una variante de la Prueba de Trabajo basada en Hashcash. En este caso, los mineros deben encontrar un nonce que, junto con otros datos, genere un hash que cumpla con una dificultad específica. La dificultad se ajusta periódicamente para mantener el tiempo promedio de bloqueo en aproximadamente 10 minutos. |
 
-3. Ethash (Ethereum): Ethereum utiliza el algoritmo Ethash como su Prueba de Trabajo. En Ethash, en lugar de solo buscar un nonce, se requiere que los mineros realicen una gran cantidad de cálculos de acceso a memoria, lo que dificulta la implementación de hardware especializado para minar de manera eficiente.
+| Ethash (Ethereum) | Ethereum utiliza el algoritmo Ethash como su Prueba de Trabajo. En Ethash, en lugar de solo buscar un nonce, se requiere que los mineros realicen una gran cantidad de cálculos de acceso a memoria, lo que dificulta la implementación de hardware especializado para minar de manera eficiente. |
 
-4. Equihash (Zcash): Equihash es otro algoritmo de Prueba de Trabajo utilizado en la criptomoneda Zcash. Se basa en el problema de los "circuitos generalizados de satisfacción de la condición" (generalized birthday problem) y requiere una gran cantidad de memoria, lo que también dificulta la implementación de hardware especializado.
+| Equihash (Zcash) | Equihash es otro algoritmo de Prueba de Trabajo utilizado en la criptomoneda Zcash. Se basa en el problema de los "circuitos generalizados de satisfacción de la condición" (generalized birthday problem) y requiere una gran cantidad de memoria, lo que también dificulta la implementación de hardware especializado.|
 
 Para el proyecto se escogió la técnica de Hashcash donde el número de ceros iniciales es de solo 4 ceros, ya que se busca un equilibrio entre seguridad y eficiencia.
 
