@@ -24,7 +24,17 @@ El uso de blockchain en el ámbito financiero ha ganado popularidad en los últi
 
 #### **Circular Double List**
 
-Falta completar
+En un blockchain, una estructura de datos comúnmente utilizada es la lista circular doblemente enlazada. Esta estructura se utiliza para mantener un registro de transacciones en un orden específico y permitir un acceso eficiente a los bloques de datos.
+
+La lista circular doblemente enlazada consta de nodos, donde cada nodo contiene dos punteros: uno hacia el nodo anterior y otro hacia el siguiente nodo en la lista. El primer nodo se enlaza con el último nodo de la lista, creando así un ciclo continuo.
+
+En el contexto de un blockchain, cada bloque de transacciones se puede representar como un nodo en la lista circular doblemente enlazada. Cada nodo contendría la información del bloque, como el hash del bloque anterior, el hash del bloque actual, la información de las transacciones.
+
+Aquí hay una representación visual de la estructura de la lista circular doblemente enlazada en un blockchain:
+
+![Blockchain](https://github.com/JoseGarayar/blockchain_UTEC/assets/134245641/95ff93e6-f58d-40f0-9e9c-524a9c4af3a8)
+
+
 
 ### - Prueba de trabajo
 
