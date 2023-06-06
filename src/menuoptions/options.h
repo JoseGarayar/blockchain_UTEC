@@ -225,7 +225,7 @@ void cargarArchivoCSV(Blockchain & blockchain, ConsoleWriter writer){
     
 }
 
-void opcionBuscarEmisor(Blockchain & blockchain, ConsoleWriter writer){
+void buscarPorEmisor(Blockchain & blockchain, ConsoleWriter writer){
     writer.clearScreen();
     writer.write(2,10,"OPCION - Buscar transacciones por Emisor");
     writer.write(5,10,"Ingresar el nombre exacto del emisor para buscar todas las transacciones: ");
@@ -286,7 +286,7 @@ void opcionBuscarEmisor(Blockchain & blockchain, ConsoleWriter writer){
     writer.getchr();
 }
 
-void opcionBuscarReceptor(Blockchain & blockchain, ConsoleWriter writer){
+void buscarPorReceptor(Blockchain & blockchain, ConsoleWriter writer){
     writer.clearScreen();
     writer.write(2,10,"OPCION - Buscar transacciones por Receptor");
     writer.write(5,10,"Ingresar el nombre exacto del receptor para buscar todas las transacciones: ");
@@ -344,5 +344,44 @@ void opcionBuscarReceptor(Blockchain & blockchain, ConsoleWriter writer){
         writer.clearScreen();
         row = 4;      
     }
+    writer.getchr();
+}
+
+void buscarMontoMaximo(Blockchain & blockchain, ConsoleWriter writer){
+    writer.clearScreen();
+    writer.write(2,10,"Buscar Monto Máximo");
+    writer.write(4,5,"La transacción con importe máximo registrado es: ");
+    
+    Transaction maxTransaction = blockchain.findMaxTransaction();
+
+    int row = 6;
+    writer.write(row++, 5, "ID Transaccion: " + to_string( maxTransaction.idTransaccion )); 
+    writer.write(row++, 5, "Nombre Emisor: " + maxTransaction.nombreOrigen);      
+    writer.write(row++, 5, "Nombre Receptor: " + maxTransaction.nombreDestino);      
+    writer.write(row++, 5, "Importe: " + to_string( maxTransaction.importe ));      
+    writer.write(row++, 5, "Fecha: " + maxTransaction.fecha);
+
+    writer.write(row+2, 5, "Presione cualquier tecla para regresar al menu");
+
+    writer.getchr();
+}
+
+
+void buscarMontoMinimo(Blockchain & blockchain, ConsoleWriter writer){
+    writer.clearScreen();
+    writer.write(2,10,"Buscar Monto Mínimo");
+    writer.write(4,5,"La transacción con importe mínimo registrado es: ");
+    
+    Transaction minTransaction = blockchain.findMinTransaction();
+
+    int row = 6;
+    writer.write(row++, 5, "ID Transaccion: " + to_string( minTransaction.idTransaccion )); 
+    writer.write(row++, 5, "Nombre Emisor: " + minTransaction.nombreOrigen);      
+    writer.write(row++, 5, "Nombre Receptor: " + minTransaction.nombreDestino);      
+    writer.write(row++, 5, "Importe: " + to_string( minTransaction.importe ));      
+    writer.write(row++, 5, "Fecha: " + minTransaction.fecha);
+
+    writer.write(row+2, 5, "Presione cualquier tecla para regresar al menu");
+
     writer.getchr();
 }

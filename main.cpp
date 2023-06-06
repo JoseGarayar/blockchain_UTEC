@@ -30,8 +30,8 @@ int main() {
             "3. Mostrar Blockchain",
             "4. Buscar por Emisor o Receptor",             
             "5. Buscar por Rango",             
-            "6. Buscar Máximo Monto",             
-            "7. Buscar Monto Mínimo",
+            "6. Buscar por Monto Máximo",             
+            "7. Buscar por Monto Mínimo",
             "8. Recalculo en cascada",
             "9. Salir"
         };
@@ -70,10 +70,10 @@ int main() {
                 writer.write(10, 5, "Buscar por emisor o receptor");
                 opcionEmisorReceptor = writer.createMenu("SELECCIONAR UNA OPCION", opcionesMenuEmisorReceptor, 3, 12, 5);
                 if (opcionEmisorReceptor == '1') {
-                    opcionBuscarEmisor(blockchain, writer);
+                    buscarPorEmisor(blockchain, writer);
                 }
                 if (opcionEmisorReceptor == '2') {
-                    opcionBuscarReceptor(blockchain, writer);
+                    buscarPorReceptor(blockchain, writer);
                 }
                 if (opcionEmisorReceptor == '3') {
                     break;
@@ -86,16 +86,12 @@ int main() {
                 // Aquí puedes agregar el código correspondiente para cargar desde un archivo
                 break;
             case '6':
-                // Buscar Máximo Monto
-                writer.clearScreen();
-                writer.write(10, 5, "Opción 2 seleccionada: Cargar desde archivo");
-                // Aquí puedes agregar el código correspondiente para cargar desde un archivo
+                // Buscar por Monto Máximo
+                buscarMontoMaximo(blockchain, writer);
                 break;
             case '7':
-                // Buscar Monto Mínimo
-                writer.clearScreen();
-                writer.write(10, 5, "Opción 2 seleccionada: Cargar desde archivo");
-                // Aquí puedes agregar el código correspondiente para cargar desde un archivo
+                // Buscar por Monto Mínimo
+                buscarMontoMinimo(blockchain, writer);
                 break;
             case '8':
                 // Recalculo en cascada
