@@ -31,22 +31,98 @@ La lista circular doblemente enlazada consta de nodos, donde cada nodo contiene 
 En el contexto de un blockchain, cada bloque de transacciones se puede representar como un nodo en la lista circular doblemente enlazada. Cada nodo contendría la información del bloque, como el hash del bloque anterior, el hash del bloque actual, la información de las transacciones.
 
 Aquí hay una representación visual de la estructura de la lista circular doblemente enlazada en un blockchain:
-![Blockchain](https://github.com/JoseGarayar/blockchain_UTEC/assets/134245641/effbf741-d878-4261-8512-07dd982963b8)
+
+   ![Blockchain](https://github.com/JoseGarayar/blockchain_UTEC/assets/134245641/effbf741-d878-4261-8512-07dd982963b8)
 
 La informacion de la transaccion estara constituido por el ID de la transaccion, Emisor, Receptor, Importe y Fecha. Se pueden realizar distintas transacciones y almacenarlas en un bloque utilizando la clase desarrollado "Block"; para luego ser estructurado en lista circular doblemente enlazada a travez del metodo "addBlock" de la clase Blockchain creada.  .
 
 ![INTRODEDATOS](https://github.com/JoseGarayar/blockchain_UTEC/assets/134245641/19fd0bdc-ecd5-42e5-845d-8785587ee00b)
 
-La Clase block como se observa no solo contiene la transaccion efectuada, tambien lo que es el indice de la lista circular doblemente enlazada en la que se va a ubicar y el previousHash
+La Clase block como se observa no solo contiene la transaccion efectuada, tambien lo que es el indice de la lista circular doblemente enlazada en la que se va a ubicar, el previousHash, el nonce y el hash . 
 
-![Claseblock](https://github.com/JoseGarayar/blockchain_UTEC/assets/134245641/d6bed802-4665-492e-9a39-8e11b592f91b)
+``` js
+class Block {
+private:
+    int index;
+    vector<Transaction> data;
+    string previousHash;
+    string hash;
+    int nonce;
+     
+public:
+    Block(int index, const vector<Transaction>& data, const string& previousHash) {
+        this->index = index;
+        this->data = data;
+        this->previousHash = previousHash;        
+        this->nonce = 0;
+        this->hash = mineBlock();
+    
+    }
+};
 
+```
 
 Cada bloque creado sera introducido en el blockchain (lista circular doblemente enlazada) mediante un push_back aplicado en el metodo "addBlock" de la clase "Blockchain"
 
+``` js
+class Blockchain {
+private:
+    
+    CircularDoubleList<Block*> blockchain;
 
-![clase blockchain](https://github.com/JoseGarayar/blockchain_UTEC/assets/134245641/c57cdfb7-4f00-4ddb-aba5-1bbdbebaa629)
+public:
+    typedef CircularDoubleListIterator<Block*> iterator;
 
+    Blockchain() {}
+
+    void addBlock(vector<Transaction>& data) {
+        int index = blockchain.size();
+        const string& previousHash = index != 0 ? blockchain.back()->getHash() : defaultHash();
+        Block* newBlock = new Block(index, data, previousHash);
+        blockchain.push_back(newBlock);        
+        
+    }
+```
+
+La identidad propia del bloque hijo cambia si la identidad del padre cambia.Es decir: 
+  *	Si por alguna razón el contenido del bloque padre se modifica, el código hash del padre también cambia. 
+  *	El cambio de hash del padre requiere una alteración en el puntero "Prev" del hijo. 
+  *	Esto, a su vez, hace que el hash del hijo mute, lo que requiere un cambio en el puntero del nieto, que a su vez altera al nieto y así sucesivamente. 
+
+Para este escenario se implemento el metodo "cascadeEffect()" en la clase "Blockchain", que genera otros actualizados hashcode y previous hash del bloque a partir del padre bloque actualizado (o borrado) 
+
+``` js
+    void cascadeEffect() {
+        CircularDoubleList<Block*>::iterator ite = blockchain.begin();
+        CircularDoubleList<Block*>::iterator ite_prev = blockchain.begin();
+        int i = 0;
+        for(; ite != blockchain.end(); ++ite){
+            if (i == 0) {
+                (*ite)->update_block(i, (*ite)->getData(), defaultHash());
+                ite_prev = ite;
+            } else {
+                (*ite)->update_block(i, (*ite)->getData(), (*ite_prev)->getHash());
+                ++ite_prev;
+            }
+            i++;
+        }
+    }
+```
+Se mostraran el efecto cascada en la siguientes imagenes
+
+**Blockchain Inicial**
+
+![blockhchain actual](https://github.com/JoseGarayar/blockchain_UTEC/assets/134245641/432819bf-e825-4d24-8bf9-83027426d8dd)
+
+
+**Blockchain Con Transaccion Modificada**
+
+![blockhchain modificado](https://github.com/JoseGarayar/blockchain_UTEC/assets/134245641/c890277e-b052-443d-8a05-6273baaa2ff6)
+
+
+**Blockchain Con Bloque Eliminado**
+
+![blockhchain eliminado](https://github.com/JoseGarayar/blockchain_UTEC/assets/134245641/828afd82-1956-4f6c-be28-6317eb0dfd3f)
 
 ### - Prueba de trabajo
 
@@ -55,29 +131,114 @@ En un blockchain, la técnica de Prueba de Trabajo (Proof of Work, PoW) se utili
 | Opcion | Descripcion |
 | ------ | ----------- |
 | Hashcash |  Hashcash fue la primera implementación de Prueba de Trabajo utilizada en el protocolo de correo electrónico para prevenir el spam. En Hashcash, se requiere que los participantes encuentren un nonce (número arbitrario utilizado solo una vez) que, al ser aplicado a una función hash criptográfica, genere un valor hash que cumpla con ciertos requisitos, como tener un cierto número de ceros iniciales. La dificultad se puede ajustar mediante la variación de la cantidad de ceros requeridos.|
-
 | Bitcoin PoW | Bitcoin utiliza una variante de la Prueba de Trabajo basada en Hashcash. En este caso, los mineros deben encontrar un nonce que, junto con otros datos, genere un hash que cumpla con una dificultad específica. La dificultad se ajusta periódicamente para mantener el tiempo promedio de bloqueo en aproximadamente 10 minutos. |
-
 | Ethash (Ethereum) | Ethereum utiliza el algoritmo Ethash como su Prueba de Trabajo. En Ethash, en lugar de solo buscar un nonce, se requiere que los mineros realicen una gran cantidad de cálculos de acceso a memoria, lo que dificulta la implementación de hardware especializado para minar de manera eficiente. |
-
 | Equihash (Zcash) | Equihash es otro algoritmo de Prueba de Trabajo utilizado en la criptomoneda Zcash. Se basa en el problema de los "circuitos generalizados de satisfacción de la condición" (generalized birthday problem) y requiere una gran cantidad de memoria, lo que también dificulta la implementación de hardware especializado.|
 
 Para el proyecto se escogió la técnica de Hashcash donde el número de ceros iniciales es de solo 4 ceros, ya que se busca un equilibrio entre seguridad y eficiencia.
 
+Ya que cada bloque es identificable por un código hash, generado mediante un algoritmo de hash criptográfico a partir de toda la información que contiene el bloque. En nuestra clase "Block" se generara a traves del metodo "mineBlock()" 
+
+``` js
+class Block {
+private:
+    int index;
+    vector<Transaction> data;
+    string previousHash;
+    string hash;
+    int nonce;
+    
+public:
+    Block(int index, const vector<Transaction>& data, const string& previousHash) {
+        this->index = index;
+        this->data = data;
+        this->previousHash = previousHash;        
+        this->nonce = 0;
+        this->hash = mineBlock();
+    
+    }
+```
+El metodo "mineBlock()"  que en base a la tecnica Hacash mina un hash_code con 4 ceros iniciales utilizando una funcion hash, dicha funcion para mantener las propiedades del hash (indexación eficiente en el rendimiento de las búsquedas, libre de colisiones, estable y segura) utilizamos una librería estándar de criptografía como  OpenSSL.
+
+``` js
+    string mineBlock() {
+        string targetPrefix = "0000";
+        while (true) {
+            hash = calculateHash(index, data, previousHash, nonce);
+            if (hash.substr(0,4) == targetPrefix) {
+                return hash;
+            }
+            nonce++;
+        }
+    }
+
+    string calculateHash(int index, const vector<Transaction>& data, const string& previousHash, int nonce) const {
+        stringstream ss;
+        ss << index;
+        for (const Transaction& transaction : data) {
+            ss << transaction.idTransaccion << transaction.nombreOrigen << transaction.nombreDestino << transaction.importe << transaction.fecha;
+        }
+        ss << previousHash << nonce << index;
+
+        unsigned char hash[SHA256_DIGEST_LENGTH];
+        SHA256_CTX sha256;
+        SHA256_Init(&sha256);
+        SHA256_Update(&sha256, ss.str().c_str(), ss.str().size());
+        SHA256_Final(hash, &sha256);
+
+        stringstream hashStream;
+        for (int i = 0; i < SHA256_DIGEST_LENGTH; ++i) {
+            hashStream << hex << setw(2) << setfill('0') << (int)hash[i];
+        }
+
+        return hashStream.str();
+    }
+```
+
 ## 5. Explicación de cada una de las estructuras de datos utilizada en su aplicación de acuerdo a los criterios de búsqueda.
 
-Falta completar (Use diagramas para una mejor claridad)
+Dado que se requiere una aplicación transaccional que permita a un usuario registrar transacciones bancarias de manera segura en el Blockchain, para luego aplicar búsquedas eficientes usando diversas estructuras de datos como mecanismos de indexación para diferentes criterios de búsqueda. Utilizaremos para nuestra aplicacion las estructuras Hash **table**, **Arbol binario BST** , y **Heap**
 
-#### **Chainhash**
+![estructuras de indexacion (2)](https://github.com/JoseGarayar/blockchain_UTEC/assets/134245641/3d6382f3-6145-4a5a-828b-f524738d80c0)
 
-Falta completar (Indicar para que criterios de busqueda se utiliza)
+●	Dado los siguientes criterios de búsqueda, para indexar los bloques usaremos la estructura de datos más apropiada de acuerdo al tipo de filtrado requerido:
+1.	Igual a X 
+vector<Record>  search(TK key)
+2.	Entre X y Y 
+vector<Record> range_search(TK begin, TK end)
+3.	Inicia con 
+vector<Record> start_with(string prefix)
+4.	Máximo valor de 
+Record max_value( )
+5.	Mínimo valor de
+Record min_value( )
+
+
+
+#### **Hash Table**
+  
+**Igual a X**
+**vector<Record>  search(TK key)**
+En el blockchain, utilizamos un hash table como estructura de indexación para mejorar la eficiencia de la búsqueda y recuperación de información en la cadena de bloques. Un hash table es una estructura de datos que permite el acceso rápido a los datos almacenados asociándolos con claves únicas.
+
+La razon por la que se utiliza una tabla hash en nuestro blockchain:
+
+Búsqueda eficiente: Conforme el blockchain crece en tamaño, buscar un bloque específico o una transacción en la cadena lineal de bloques puede volverse ineficiente . Utilizando una tabla hash, se pueden generar claves únicas basadas en ciertos atributos del bloque o la transacción, como su identificador o su hash. Estas claves permiten una búsqueda directa y rápida en la tabla hash, evitando la necesidad de recorrer toda la cadena de bloques insertadas en la lista doblemente enlazadas.
+
+Indexación de transacciones: En el caso de blockchains que almacenan transacciones, una tabla hash puede utilizarse para indexar y acceder rápidamente a transacciones específicas.
 
 #### **BST (Binary Search Tree)**
-
+**Entre X y Y**
+**vector<Record> range_search(TK begin, TK end)**
+  
 Falta completar (Indicar para que criterios de busqueda se utiliza)
 
 #### **Heap**
-
+**Máximo valor de**
+**Record max_value( )**
+**Mínimo valor de**
+**Record min_value( )**
+  
 Para realizar búsqueda del máximo y mínimo importe transferido se utilizó la estructura de datos `Heap`, `MaxHeap` y `MinHeap` para obtener el máximo y mínimo importe respectivamente con una complejidad de O(1).
 
 ## 6. Análisis de la complejidad en notación Big O de los métodos del Blockchain.
@@ -128,7 +289,7 @@ Juan José Granados
 
 Carlos Villanueva
 
-- Implementar estructura de datos "Chain Hash".
-- Usar estructura de datos "Chain Hash" para indexación de criterio de búsqueda "Igual a X", esto se actualiza al agregar, actualizar o eliminar bloque.
+- Implementar estructura de datos "Hash Table".
+- Usar estructura de datos "Hash Tabke" para indexación de criterio de búsqueda "Igual a X", esto se actualiza al agregar, actualizar o eliminar bloque.
 - Agregar información de las estructuras de datos al informe.
 - Elaborar presentación PowerPoint del proyecto.
