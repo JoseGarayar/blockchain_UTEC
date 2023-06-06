@@ -86,12 +86,6 @@ void displaychain (Blockchain & blockchain, ConsoleWriter writer){
 
 }
 
-
-void opcion1InsertarBloque(Blockchain & blockchain, ConsoleWriter writer){
-    writer.clearScreen();
-
-}
-
 void opcion2CargarArchivo(Blockchain & blockchain, ConsoleWriter writer){
     writer.clearScreen();
     writer.write(2,10,"OPCION 2 - Generar Blockchain desde archivo .csv");
@@ -133,3 +127,124 @@ void opcion2CargarArchivo(Blockchain & blockchain, ConsoleWriter writer){
     
 }
 
+void opcionBuscarEmisor(Blockchain & blockchain, ConsoleWriter writer){
+    writer.clearScreen();
+    writer.write(2,10,"OPCION - Buscar transacciones por Emisor");
+    writer.write(5,10,"Ingresar el nombre exacto del emisor para buscar todas las transacciones: ");
+
+    string nombreEmisor = writer.readString();
+
+    int row = 4;
+    string ss;
+    vector<Transaction> vectorEmisor = blockchain.findTransactionsByFromName(nombreEmisor);
+    if (vectorEmisor.empty()) {
+        writer.write(7,10,"No existen transacciones emitidas por: " + nombreEmisor);
+        writer.write(9,10,"Presione cualquier tecla para salir al menu principal.");
+        writer.getchr();
+        return;
+    }
+    writer.clearScreen();
+    vector<Transaction>::iterator ite = vectorEmisor.begin();
+    while (ite != vectorEmisor.end()) {
+        ss = "ID Transaccion: " + to_string( (*ite).idTransaccion );
+        writer.write(++row, 10, ss);      
+        ss = "Nombre Emisor: " + (*ite).nombreOrigen;
+        writer.write(++row, 10, ss);      
+        ss = "Nombre Receptor: " + (*ite).nombreDestino;
+        writer.write(++row, 10, ss);      
+        ss = "Importe: " + to_string( (*ite).importe );
+        writer.write(++row, 10, ss);      
+        ss = "Fecha: " + (*ite).fecha;
+        writer.write(++row, 10, ss);  
+
+        writer.write(row+4,5,"Presione una tecla [<] para retroceder [>] para avanzar o [Q] para regresar a menu");
+        int x = writer.getwchr();
+        switch( x ) {
+            case KEY_UP:
+                --ite;
+                break;
+            case KEY_LEFT:
+                --ite;
+                break;
+            case KEY_DOWN:
+                ++ite;
+                break;
+            case KEY_RIGHT:
+                ++ite;
+                break;
+            case 113:
+                return;
+                break;
+            case 21:
+                return;
+                break;            
+        }
+        if (x == KEY_EXIT){
+            break;
+        }
+        writer.clearScreen();
+        row = 4;      
+    }
+    writer.getchr();
+}
+
+void opcionBuscarReceptor(Blockchain & blockchain, ConsoleWriter writer){
+    writer.clearScreen();
+    writer.write(2,10,"OPCION - Buscar transacciones por Receptor");
+    writer.write(5,10,"Ingresar el nombre exacto del receptor para buscar todas las transacciones: ");
+
+    string nombreReceptor = writer.readString();
+
+    int row = 4;
+    string ss;
+    vector<Transaction> vectorReceptor = blockchain.findTransactionsByToName(nombreReceptor);
+    if (vectorReceptor.empty()) {
+        writer.write(7,10,"No existen transacciones recibidas por: " + nombreReceptor);
+        writer.write(9,10,"Presione cualquier tecla para salir al menu principal.");
+        writer.getchr();
+        return;
+    }
+    writer.clearScreen();
+    vector<Transaction>::iterator ite = vectorReceptor.begin();
+    while (ite != vectorReceptor.end()) {
+        ss = "ID Transaccion: " + to_string( (*ite).idTransaccion );
+        writer.write(++row, 10, ss);      
+        ss = "Nombre Emisor: " + (*ite).nombreOrigen;
+        writer.write(++row, 10, ss);      
+        ss = "Nombre Receptor: " + (*ite).nombreDestino;
+        writer.write(++row, 10, ss);      
+        ss = "Importe: " + to_string( (*ite).importe );
+        writer.write(++row, 10, ss);      
+        ss = "Fecha: " + (*ite).fecha;
+        writer.write(++row, 10, ss);  
+
+        writer.write(row+4,5,"Presione una tecla [<] para retroceder [>] para avanzar o [Q] para regresar a menu");
+        int x = writer.getwchr();
+        switch( x ) {
+            case KEY_UP:
+                --ite;
+                break;
+            case KEY_LEFT:
+                --ite;
+                break;
+            case KEY_DOWN:
+                ++ite;
+                break;
+            case KEY_RIGHT:
+                ++ite;
+                break;
+            case 113:
+                return;
+                break;
+            case 21:
+                return;
+                break;            
+        }
+        if (x == KEY_EXIT){
+            break;
+        }
+        writer.clearScreen();
+        row = 4;      
+    }
+    writer.getchr();
+}

@@ -8,12 +8,18 @@ int main() {
     Blockchain blockchain;
     ConsoleWriter writer;    
     char opcion;
+    char opcionEmisorReceptor;
+    string opcionesMenuEmisorReceptor[] = {
+        "1. Buscar por emisor",
+        "2. Buscar por receptor",
+        "3. Regresar al menu principal"
+    };
 
     while (true) {
         writer.clearScreen();  // Limpiar la pantalla
         
         std::string opcionesMenu[] = {"1. Insertar Bloque",
-            "2. Gererar Blockchain desde archivo", 
+            "2. Generar Blockchain desde archivo", 
             "3. Mostrar Blockchain",
             "4. Buscar por Emisor o Receptor",             
             "5. Buscar por Rango",             
@@ -21,6 +27,7 @@ int main() {
             "7. Buscar Monto Mínimo",
             "8. Recalculo en cascada",
             "9. Salir"};
+
         opcion = writer.createMenu("MENU PRINCIPAL",opcionesMenu,9,10,5);
         switch (opcion) {
             case '1':
@@ -37,16 +44,21 @@ int main() {
                 break;
             case '3':
                 // Opción 2: Cargar desde archivo
-                //writer.clearScreen();
-                //writer.write(10, 5, "Opción 2 seleccionada: Cargar desde archivo");
                 displaychain(blockchain, writer);
-                // Aquí puedes agregar el código correspondiente para cargar desde un archivo
                 break;
             case '4':
-                // Opción 2: Cargar desde archivo
                 writer.clearScreen();
-                writer.write(10, 5, "Opción 2 seleccionada: Cargar desde archivo");
-                // Aquí puedes agregar el código correspondiente para cargar desde un archivo
+                writer.write(10, 5, "Opción 4 seleccionada: Buscar por emisor o receptor");
+                opcionEmisorReceptor = writer.createMenu("SELECCIONAR UNA OPCION", opcionesMenuEmisorReceptor, 3, 12, 5);
+                if (opcionEmisorReceptor == '1') {
+                    opcionBuscarEmisor(blockchain, writer);
+                }
+                if (opcionEmisorReceptor == '2') {
+                    opcionBuscarReceptor(blockchain, writer);
+                }
+                if (opcionEmisorReceptor == '3') {
+                    break;
+                }
                 break;
             case '5':
                 // Opción 2: Cargar desde archivo
