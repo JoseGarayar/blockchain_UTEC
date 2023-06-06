@@ -33,8 +33,19 @@ En el contexto de un blockchain, cada bloque de transacciones se puede represent
 Aquí hay una representación visual de la estructura de la lista circular doblemente enlazada en un blockchain:
 ![Blockchain](https://github.com/JoseGarayar/blockchain_UTEC/assets/134245641/effbf741-d878-4261-8512-07dd982963b8)
 
-La informacion de la transaccion estara constituido por el ID de la transaccion, Emisor, Receptor, Importe y Fecha. Se pueden almacenar distintas transacciones en un bloque utilizando la clase desarrollado "Block". 
+La informacion de la transaccion estara constituido por el ID de la transaccion, Emisor, Receptor, Importe y Fecha. Se pueden realizar distintas transacciones y almacenarlas en un bloque utilizando la clase desarrollado "Block"; para luego ser estructurado en lista circular doblemente enlazada a travez del metodo "addBlock" de la clase Blockchain creada.  .
+
 ![INTRODEDATOS](https://github.com/JoseGarayar/blockchain_UTEC/assets/134245641/19fd0bdc-ecd5-42e5-845d-8785587ee00b)
+
+La Clase block como se observa no solo contiene la transaccion efectuada, tambien lo que es el indice de la lista circular doblemente enlazada en la que se va a ubicar y el previousHash
+
+![Claseblock](https://github.com/JoseGarayar/blockchain_UTEC/assets/134245641/d6bed802-4665-492e-9a39-8e11b592f91b)
+
+
+Cada bloque creado sera introducido en el blockchain (lista circular doblemente enlazada) mediante un push_back aplicado en el metodo "addBlock" de la clase "Blockchain"
+
+
+![clase blockchain](https://github.com/JoseGarayar/blockchain_UTEC/assets/134245641/c57cdfb7-4f00-4ddb-aba5-1bbdbebaa629)
 
 
 ### - Prueba de trabajo
