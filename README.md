@@ -33,7 +33,8 @@ En el contexto de un blockchain, cada bloque de transacciones se puede represent
 Aquí hay una representación visual de la estructura de la lista circular doblemente enlazada en un blockchain:
 ![Blockchain](https://github.com/JoseGarayar/blockchain_UTEC/assets/134245641/effbf741-d878-4261-8512-07dd982963b8)
 
-
+La informacion de la transaccion estara constituido por el ID de la transaccion, Emisor, Receptor, Importe y Fecha. Se pueden almacenar distintas transacciones en un bloque utilizando la clase desarrollado "Block". 
+![INTRODEDATOS](https://github.com/JoseGarayar/blockchain_UTEC/assets/134245641/19fd0bdc-ecd5-42e5-845d-8785587ee00b)
 
 
 ### - Prueba de trabajo
