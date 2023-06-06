@@ -9,6 +9,12 @@ int main() {
     ConsoleWriter writer;    
     char opcion;
     char opcionEmisorReceptor;
+    string opcionesMenuBloque[] = {
+        "1. Insertar bloque",
+        "2. Borrar bloque",
+        "3. Actualizar transacciones bloque",
+        "4. Regresar al menu principal"
+    };
     string opcionesMenuEmisorReceptor[] = {
         "1. Buscar por emisor",
         "2. Buscar por receptor",
@@ -18,7 +24,8 @@ int main() {
     while (true) {
         writer.clearScreen();  // Limpiar la pantalla
         
-        std::string opcionesMenu[] = {"1. Insertar Bloque",
+        std::string opcionesMenu[] = {
+            "1. Insertar, borrar o actualizar Bloque",
             "2. Generar Blockchain desde archivo", 
             "3. Mostrar Blockchain",
             "4. Buscar por Emisor o Receptor",             
@@ -26,26 +33,41 @@ int main() {
             "6. Buscar Máximo Monto",             
             "7. Buscar Monto Mínimo",
             "8. Recalculo en cascada",
-            "9. Salir"};
+            "9. Salir"
+        };
 
         opcion = writer.createMenu("MENU PRINCIPAL",opcionesMenu,9,10,5);
         switch (opcion) {
             case '1':
-                // Opción 1: Insertar registro
-                opcion1InsertarBloque(blockchain, writer);
+                // Insertar, borrar o actualizar Bloque
+                writer.clearScreen();
+                writer.write(10, 5, "Insertar, borrar o actualizar Bloque");
+                opcionEmisorReceptor = writer.createMenu("SELECCIONAR UNA OPCION", opcionesMenuBloque, 4, 12, 5);
+                if (opcionEmisorReceptor == '1') {
+                    InsertarBloque(blockchain, writer);
+                }
+                if (opcionEmisorReceptor == '2') {
+                    borrarBloque(blockchain, writer);
+                }
+                if (opcionEmisorReceptor == '3') {
+                    actualizarBloque(blockchain, writer);
+                }
+                if (opcionEmisorReceptor == '4') {
+                    break;
+                }
                 break;
             case '2':
-                // Opción 2: Cargar desde archivo
-                opcion2CargarArchivo(blockchain, writer);
-                // Aquí puedes agregar el código correspondiente para cargar desde un archivo
+                // Cargar desde archivo csv
+                cargarArchivoCSV(blockchain, writer);
                 break;
             case '3':
-                // Opción 2: Cargar desde archivo
+                // Mostrar Blockchain
                 displaychain(blockchain, writer);
                 break;
             case '4':
+                // Buscar por Emisor o Receptor
                 writer.clearScreen();
-                writer.write(10, 5, "Opción 4 seleccionada: Buscar por emisor o receptor");
+                writer.write(10, 5, "Buscar por emisor o receptor");
                 opcionEmisorReceptor = writer.createMenu("SELECCIONAR UNA OPCION", opcionesMenuEmisorReceptor, 3, 12, 5);
                 if (opcionEmisorReceptor == '1') {
                     opcionBuscarEmisor(blockchain, writer);
@@ -58,31 +80,31 @@ int main() {
                 }
                 break;
             case '5':
-                // Opción 2: Cargar desde archivo
+                // Buscar por Rango
                 writer.clearScreen();
                 writer.write(10, 5, "Opción 2 seleccionada: Cargar desde archivo");
                 // Aquí puedes agregar el código correspondiente para cargar desde un archivo
                 break;
             case '6':
-                // Opción 2: Cargar desde archivo
+                // Buscar Máximo Monto
                 writer.clearScreen();
                 writer.write(10, 5, "Opción 2 seleccionada: Cargar desde archivo");
                 // Aquí puedes agregar el código correspondiente para cargar desde un archivo
                 break;
             case '7':
-                // Opción 2: Cargar desde archivo
+                // Buscar Monto Mínimo
                 writer.clearScreen();
                 writer.write(10, 5, "Opción 2 seleccionada: Cargar desde archivo");
                 // Aquí puedes agregar el código correspondiente para cargar desde un archivo
                 break;
             case '8':
-                // Opción 2: Cargar desde archivo
+                // Recalculo en cascada
                 writer.clearScreen();
                 writer.write(10, 5, "Opción 2 seleccionada: Cargar desde archivo");
                 // Aquí puedes agregar el código correspondiente para cargar desde un archivo
                 break;
             case '9':
-                // Opción 9: Salir
+                // Salir
                 writer.clearScreen();
                 writer.write(10, 5, "Saliendo del programa...");
                 return 0;

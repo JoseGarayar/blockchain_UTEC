@@ -4,7 +4,7 @@
 #include "../console/consolewriter.h"
 
 
-void opcion1InsertarBloque(Blockchain & blockchain, ConsoleWriter writer){
+void InsertarBloque(Blockchain & blockchain, ConsoleWriter writer){
 
     int row= 5;
     int ntran =0;
@@ -58,6 +58,65 @@ void opcion1InsertarBloque(Blockchain & blockchain, ConsoleWriter writer){
     }
 
 }
+
+void borrarBloque(Blockchain & blockchain, ConsoleWriter writer) {
+    writer.clearScreen();
+    writer.write(2,10,"BORRAR BLOQUE");
+    writer.write(4,5,"Indicar el id del bloque a eliminar: ");
+    int id_bloque = writer.readInt();
+    blockchain.deleteBlock(id_bloque);
+    writer.write(7,5,"Eliminado correctamente el Bloque con id: " + to_string(id_bloque));
+    writer.write(9,5,"Presione cualquier tecla para salir al menu principal.");
+    writer.getchr();
+    return;
+}
+
+void actualizarBloque(Blockchain & blockchain, ConsoleWriter writer){
+    writer.clearScreen();
+    writer.write(2,10,"ACTUALIZAR BLOQUE");
+    writer.write(4,5,"Indicar el id del bloque a eliminar: ");
+    int id_bloque = writer.readInt();
+    writer.write(6,5,"Indicar el número de transacciones a ingresar (max 5):");
+    int nro_trans = writer.readInt();
+    if (nro_trans <= 0 || nro_trans > 5) {
+        writer.write(8,5,"Valor incorrecto!");
+        writer.write(9,5,"Presione cualquier tecla para salir al menu principal.");
+        writer.getchr();
+        return;
+    }
+    vector<Transaction> transactions;
+    int row = 5;
+    writer.clearScreen();
+    writer.write(2,10,"ACTUALIZAR BLOQUE");
+    for (int i=1; i<= nro_trans;i++ ){
+        string ss = "ID Transaccion: " + std::to_string(i);
+        writer.write(++row,5,ss);
+        writer.write(++row,5,"Ingresa Nro. Transacción: ");
+        int nroTran = writer.readInt();
+        writer.write(++row,5,"Nombre Emisor:");
+        string nombreEmisor = writer.readString();
+        writer.write(row,50,"Nombre Receptor:");
+        string nombreReceptor = writer.readString();
+
+        writer.write(++row,5,"Importe: ");
+        double importe = writer.readDouble();
+
+        writer.write(row,50,"Fecha Transacción (yyyy-mm-dd): ");
+        string fechatrans = writer.readString();
+        transactions.push_back({nroTran,nombreEmisor ,nombreReceptor, importe, fechatrans});
+        ++row;
+    }
+
+    blockchain.updateDataBlock(id_bloque, transactions);
+    writer.clearScreen();
+    writer.write(2,10,"ACTUALIZAR BLOQUE");
+    writer.write(4,5,"Actualizado correctamente el Bloque con id: " + to_string(id_bloque));
+    writer.write(5,5,"Presione cualquier tecla para salir al menu principal.");
+    writer.getchr();
+    return;
+}
+
+
 
 void displaychain (Blockchain & blockchain, ConsoleWriter writer){
     writer.clearScreen();
@@ -125,7 +184,7 @@ void displaychain (Blockchain & blockchain, ConsoleWriter writer){
 }
 
 
-void opcion2CargarArchivo(Blockchain & blockchain, ConsoleWriter writer){
+void cargarArchivoCSV(Blockchain & blockchain, ConsoleWriter writer){
     writer.clearScreen();
     writer.write(2,10,"OPCION 2 - Generar Blockchain desde archivo .csv");
     writer.write(5,10,"Presione una tecla para cargar archivo /src/CSV/transactions.csv");
