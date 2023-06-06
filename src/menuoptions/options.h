@@ -3,6 +3,63 @@
 #include "../CSV/CSVManager.h"
 #include "../console/consolewriter.h"
 
+void opcionBuscarRangoFechas(Blockchain & blockchain, ConsoleWriter writer){
+
+    string fechaIni, fechaFin;
+
+    writer.clearScreen();
+    writer.write(2,10,"BUSCAR POR RANGO DE FECHAS");
+
+    writer.write(4,5,"Fecha Inicial: ");
+    fechaIni = writer.readDateString(4,15);
+
+    writer.write(5,5,"Fecha Final: ");
+    fechaFin = writer.readDateString(4,15);
+
+    vector<Transaction> vec =  blockchain.findTransactionsByRangeof(fechaIni,fechaFin);
+
+    writer.write(7,5,"Se han encontrado los siguientes resultados");
+
+    int row = 7;
+    for (Transaction transaction: vec){
+        string ss = "ID Transaccion: " + std::to_string( transaction.idTransaccion );
+        writer.write(++row, 10, ss);
+        ss = "Nombre Emisor:" +  transaction.nombreOrigen;
+        writer.write(++row, 10, ss);
+        ss = "Nombre Receptor:" +  transaction.nombreDestino;
+        writer.write(row, 50, ss);
+        ss = "Importe: " + std::to_string( transaction.importe );
+        writer.write(++row, 10, ss);
+        ss = "Fecha:" +  transaction.fecha;
+        writer.write(row, 50, ss);
+        row++;
+        if (row >25){
+            writer.write(row+4,5,"Presione una tecla para continuar o [Q] para regresar a menu");
+            int x = writer.getwchr();
+            switch( x ) {                
+                case 113:
+                    return;
+                    break;
+                case 21:
+                    return;
+                    break;
+            }
+            if (x == KEY_EXIT){
+                break;
+            }
+            writer.clearScreen();
+            
+            writer.write(7,5,"Se han encontrado los siguientes resultados");
+            row = 7;
+        }
+        
+
+    }
+    if (row<=30){
+        writer.write(row+4,5,"Presione una tecla para continuar ");
+        writer.getwchr();
+    }
+}
 
 void InsertarBloque(Blockchain & blockchain, ConsoleWriter writer){
 
@@ -34,7 +91,7 @@ void InsertarBloque(Blockchain & blockchain, ConsoleWriter writer){
         importe = writer.readDouble();
 
         writer.write(row,50,"Fecha Transacción (yyyy-mm-dd): ");
-        fechatrans = writer.readString();
+        fechatrans = writer.readDateString(row, 83);
         transaction.push_back({nroTran,nombreEmisor ,nombreReceptor, importe, fechatrans});
         ++row;
         if(nrotransenbloque<nroRegPorBloque-1){            
@@ -139,11 +196,11 @@ void displaychain (Blockchain & blockchain, ConsoleWriter writer){
             ss = "Nombre Emisor:" +  transaction.nombreOrigen;
             writer.write(++row, 10, ss);
             ss = "Nombre Receptor:" +  transaction.nombreDestino;
-            writer.write(row, 40, ss);
+            writer.write(row, 50, ss);
             ss = "Importe: " + std::to_string( transaction.importe );
             writer.write(++row, 10, ss);
             ss = "Fecha:" +  transaction.fecha;
-            writer.write(row, 40, ss);
+            writer.write(row, 50, ss);
         }
         ss = "Previous Hash: " +  (*ite)-> getPreviousHash() ;
         writer.write(++row, 5, ss);
