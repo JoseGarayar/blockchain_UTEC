@@ -115,6 +115,9 @@ public:
             // Hash Table
             hashTableFromName.remove(ele.nombreOrigen);
             hashTableToName.remove(ele.nombreDestino);
+            // Max y Min Heap
+            maxHeap.deleteNode(ele);
+            minHeap.deleteNode(ele);
         }
 
         if (index == 0) {
@@ -135,6 +138,9 @@ public:
             // Hash Table
             hashTableFromName.insert(ele.nombreOrigen, Pair<int, int>(index, i));
             hashTableToName.insert(ele.nombreDestino, Pair<int, int>(index, i));
+            // Max y Min Heap
+            maxHeap.insert(ele);
+            minHeap.insert(ele);
         }
     }
 
