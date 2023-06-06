@@ -31,8 +31,8 @@ La lista circular doblemente enlazada consta de nodos, donde cada nodo contiene 
 En el contexto de un blockchain, cada bloque de transacciones se puede representar como un nodo en la lista circular doblemente enlazada. Cada nodo contendría la información del bloque, como el hash del bloque anterior, el hash del bloque actual, la información de las transacciones.
 
 Aquí hay una representación visual de la estructura de la lista circular doblemente enlazada en un blockchain:
+![Blockchain](https://github.com/JoseGarayar/blockchain_UTEC/assets/134245641/effbf741-d878-4261-8512-07dd982963b8)
 
-![Blockchain](https://github.com/JoseGarayar/blockchain_UTEC/assets/134245641/6ff77588-10d5-4bd2-a309-174c8c21255e)
 
 
 
