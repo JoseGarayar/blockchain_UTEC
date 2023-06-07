@@ -177,7 +177,7 @@ El metodo "mineBlock()"  que en base a la tecnica Hacash mina un hash_code con 4
         ss << index;
         for (const Transaction& transaction : data) {
             ss << transaction.idTransaccion << transaction.nombreOrigen << transaction.nombreDestino << transaction.importe << transaction.fecha;
-        }
+        }                      
         ss << previousHash << nonce << index;
 
         unsigned char hash[SHA256_DIGEST_LENGTH];
@@ -225,12 +225,84 @@ Búsqueda eficiente: Conforme el blockchain crece en tamaño, buscar un bloque e
 
 Indexación de transacciones: En el caso de blockchains que almacenan transacciones, una tabla hash puede utilizarse para indexar y acceder rápidamente a transacciones específicas.
 
+**Adblock en el hash table**
+
+ Cada vez que se agrega un bloque, se indexa el nombre del emisor y receptor en dos tablas hash. Se guarda la informacion del nodo del bloque y del id de transaccion 
+
+ 
+ ![hashtable](https://github.com/JoseGarayar/blockchain_UTEC/assets/134245641/d416630e-b050-4b52-93db-d59aad18cef5)
+
+  Entonces para la busqueda se crean dos metodos: **findTransactionsByFromName** y **findTransactionsByToName**. Que seran busquedas por nombre del emisor y receptor.   
+   
+ ``` js
+    vector<Transaction> findTransactionsByFromName(string name){
+        vector<Transaction> result;
+        forward_list<Pair<int, int>> forwardListFromName = hashTableFromName.find(name);
+        for(auto ele : forwardListFromName) { 
+             result.push_back(blockchain[ele.first]->getData()[ele.second]);
+        }
+        return result;
+    }
+
+    vector<Transaction> findTransactionsByToName(string name){
+        vector<Transaction> result;
+        forward_list<Pair<int, int>> forwardListToName = hashTableToName.find(name);
+        for(auto ele : forwardListToName) { 
+             result.push_back(blockchain[ele.first]->getData()[ele.second]);
+        }
+        return result;
+    }
+```
+ Asi que cada vez que se hace una busqueda, se indexa el emisor y receptor, obteniendo como retorno el bloque y la transaccion donde se encuentra
+ 
+   ![hashtable2](https://github.com/JoseGarayar/blockchain_UTEC/assets/134245641/ff81fec6-a190-40fc-9f83-f643fc1f0b31)
+
+   
+   
 #### **BST (Binary Search Tree)**
 **Entre X y Y**
 **vector<Record> range_search(TK begin, TK end)**
-  
+ 
 Cuando se necesita buscar un rango de valores en una estructura de datos, como en el caso de buscar el monto de transaccion realizado en un intervalo específico, el BST se destaca debido a que mantienen sus elementos ordenados en función en este caso del importe. Esto permite realizar búsquedas eficientes, ya que se puede explorar el árbol de forma ordenada y descartar ramas completas según el rango especificado. Al comparar un monto con otro, se puede determinar si el rango de búsqueda se encuentra en el subárbol izquierdo, el subárbol derecho . Esto permite reducir el espacio de búsqueda en cada paso y, en promedio, acelerar la búsqueda. Para este proceso se tiene una complejidad de O(lgn)
 
+**Adblock en el BST**
+
+ Cada vez que se agrega un bloque, se indexa el nombre del emisor, receptor y la fecha de transaccion  en 3 arboles BST. Dentro de cada nodo del respectivo arbol tambien se guarda el nodo del bloque y el ID de la transaccion.
+  
+   ![BST](https://github.com/JoseGarayar/blockchain_UTEC/assets/134245641/44671280-d15f-4848-a9e0-3baf4c361655)
+
+Entonces para la busqueda se crean dos metodos: **findTransactionsByRangeof** y **findTransactionsByFromNameBeginWith**. Que seran busquedas por rango entre fechas y busqueda por inicial de nombre de emisor
+ 
+``` js
+    vector<Transaction> findTransactionsByRangeof(string dateIni, string dateEnd){
+
+        vector<Transaction> result;
+        vector<pair<string, pair<int, int>>> arr = bstreeDates->findRange(dateIni,dateEnd);
+
+        for(auto ele : arr) { 
+             result.push_back(blockchain[ele.second.first]->getData()[ele.second.second]);
+        }
+
+        return result;
+    } 
+   
+    vector<Transaction> findTransactionsByFromNameBeginWith(string name){
+
+        vector<Transaction> result;        
+        vector<pair<string, pair<int, int>>> arr = bstreeFromName->findKeyBeginWith(name);
+        for(auto ele : arr) { 
+             result.push_back(blockchain[ele.second.first]->getData()[ele.second.second]);
+        }
+
+        return result;
+        
+    }
+```
+ Para el caso de la busqueda por rango de fecha, utilizaremos el atributo de recorrido por anchura del BST en el bstreeDates  , asi al encontrar el rango nos ubicaremos en los bloques y transacciones respectivas de dicho rango.
+   
+   ![BST 2](https://github.com/JoseGarayar/blockchain_UTEC/assets/134245641/5c02ee17-ea60-4d53-abf8-d428556cb4a6)
+
+   
    
 #### **Heap**
 **Máximo valor de**
@@ -239,6 +311,26 @@ Cuando se necesita buscar un rango de valores en una estructura de datos, como e
 **Record min_value( )**
   
 Para realizar búsqueda del máximo y mínimo importe transferido se utilizó la estructura de datos `Heap`, `MaxHeap` y `MinHeap` para obtener el máximo y mínimo importe respectivamente con una complejidad de O(1).
+
+ **Adblock en el HEAP**
+
+ Un bloque agregado se indexa toda la informacion de la transaccion en 2 heaps: el MaxHeap y el MinHeap. Ordenados segun su monto 
+   
+   ![HEAP](https://github.com/JoseGarayar/blockchain_UTEC/assets/134245641/58711857-1773-402a-8737-9357cd01e94e)
+
+ Por lo que, para la busqueda del minimo y maximo monto se crean dos metodos: **findMaxTransaction** y **findMinTransaction**. Que seran los nodos raiz de cada heap respectivamente.
+   
+   ``` js
+    Transaction findMaxTransaction() {
+        return maxHeap.peekMax();
+    }
+
+    Transaction findMinTransaction() {
+        return minHeap.peekMin();
+    }
+```
+   
+   ![HEAP 2](https://github.com/JoseGarayar/blockchain_UTEC/assets/134245641/0ef793ea-a623-47a2-9a27-08f591be6ce2)
 
 ## 6. Análisis de la complejidad en notación Big O de los métodos del Blockchain.
 
