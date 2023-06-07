@@ -201,7 +201,7 @@ Dado que se requiere una aplicación transaccional que permita a un usuario regi
 
 ![estructuras de indexacion (2)](https://github.com/JoseGarayar/blockchain_UTEC/assets/134245641/3d6382f3-6145-4a5a-828b-f524738d80c0)
 
-●	Dado los siguientes criterios de búsqueda, para indexar los bloques usaremos la estructura de datos más apropiada de acuerdo al tipo de filtrado requerido:
+Dado los siguientes criterios de búsqueda, para indexar los bloques usaremos la estructura de datos más apropiada de acuerdo al tipo de filtrado requerido:
 1.	Igual a X 
 vector<Record>  search(TK key)
 2.	Entre X y Y 
@@ -212,8 +212,6 @@ vector<Record> start_with(string prefix)
 Record max_value( )
 5.	Mínimo valor de
 Record min_value( )
-
-
 
 #### **Hash Table**
   
@@ -231,8 +229,9 @@ Indexación de transacciones: En el caso de blockchains que almacenan transaccio
 **Entre X y Y**
 **vector<Record> range_search(TK begin, TK end)**
   
-Falta completar (Indicar para que criterios de busqueda se utiliza)
+Cuando se necesita buscar un rango de valores en una estructura de datos, como en el caso de buscar el monto de transaccion realizado en un intervalo específico, el BST se destaca debido a que mantienen sus elementos ordenados en función en este caso del importe. Esto permite realizar búsquedas eficientes, ya que se puede explorar el árbol de forma ordenada y descartar ramas completas según el rango especificado. Al comparar un monto con otro, se puede determinar si el rango de búsqueda se encuentra en el subárbol izquierdo, el subárbol derecho . Esto permite reducir el espacio de búsqueda en cada paso y, en promedio, acelerar la búsqueda. Para este proceso se tiene una complejidad de O(lgn)
 
+   
 #### **Heap**
 **Máximo valor de**
 **Record max_value( )**
@@ -247,6 +246,28 @@ Falta completar
 - Principalmente de los métodos de insertar y buscar
 - Realizar una tabla comparativa de Blockchain con índices vs sin índices.
 
+ Se muestra una tabla comparativa de analisis de complejidad de los metodos del Blockchain con indices vs sin indices
+  
+| Método del Blockchain | Sin indice O( )|Con indice O( )|
+| ----------------------| --------------| --------------|
+|addBlock               |  O(1)         | O(lgn)        |
+|deleteBlock            |  O(n)         | O(n)          | 
+|updateDataBlock        |  O(n)         | O(n)     -    |    
+|cascadeEffect          |  O(n)         | O(n)          |     
+ 
+ Como se observa no existe una diferencia marcable entre el blockchain con indices y sin indice y esto es debido al metodo **"cascadeEffect"** el cual sera llamado cada vez que se hace una actualizacion de un bloque o un delete debido a que se requiere generar nuevos hash code y prev hash de los bloques. La razon que se tiene para indexar con estructuras  radica al momento de realizar el proceso de busqueda, utilizando el mejor atributo entre el Hash table, BST, Heap (Max, Min). 
+En la siguiente tabla se muestra la complejidad O ( ) para los siguientes metodos de busqueda
+ 
+| Método del Blockchain             |  O( )         |
+| ----------------------------------| --------------|
+|findTransactionsByFromName         |  O(k)         | 
+|findTransactionsByToName           |  O(k)         | 
+|findTransactionsByFromNameBeginWith|  O(lgn)       | 
+|findTransactionsByRangeof          |  O(lgn)       |    
+|findMaxTransaction                 |  O(1)         |       
+|findMinTransaction                 |  O(1)         |      
+   
+   
 ## 7. Conclusiones
 
 La implementación de un blockchain con indexación eficiente para transacciones financieras tiene el potencial de mejorar significativamente la forma en que se almacena y se busca información en este contexto. Al estructurar los datos y utilizar algoritmos de indexación optimizados, se espera lograr una mayor eficiencia en la recuperación de información, lo que puede beneficiar a diversos actores en el sector financiero. Sin embargo, es importante destacar que el éxito del proyecto dependerá de la implementación adecuada de las técnicas de seguridad y la selección correcta de los algoritmos de indexación para garantizar la integridad y la confiabilidad de los datos almacenados en el blockchain.
@@ -295,3 +316,4 @@ Carlos Villanueva
 - Usar estructura de datos "Hash Table" para indexación de criterio de búsqueda "Igual a X", esto se actualiza al agregar, actualizar o eliminar bloque.
 - Agregar información de las estructuras de datos al informe.
 - Elaborar presentación PowerPoint del proyecto.
+- Elaboracion de informe final en el archivo README del proyecto
