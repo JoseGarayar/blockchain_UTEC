@@ -217,11 +217,8 @@ Record min_value( )
   
 **Igual a X**
 **vector<Record>  search(TK key)**
-En el blockchain, utilizamos un hash table como estructura de indexación para mejorar la eficiencia de la búsqueda y recuperación de información en la cadena de bloques. Un hash table es una estructura de datos que permite el acceso rápido a los datos almacenados asociándolos con claves únicas.
 
-La razon por la que se utiliza una tabla hash en nuestro blockchain:
-
-Búsqueda eficiente: Conforme el blockchain crece en tamaño, buscar un bloque específico o una transacción en la cadena lineal de bloques puede volverse ineficiente . Utilizando una tabla hash, se pueden generar claves únicas basadas en ciertos atributos del bloque o la transacción, como su identificador o su hash. Estas claves permiten una búsqueda directa y rápida en la tabla hash, evitando la necesidad de recorrer toda la cadena de bloques insertadas en la lista doblemente enlazadas.
+En el blockchain, utilizamos un hash table como estructura de indexación para mejorar la eficiencia de la búsqueda y recuperación de información en la cadena de bloques. Un hash table es una estructura de datos que permite el acceso rápido a los datos almacenados asociándolos con claves únicas. Conforme el blockchain crece en tamaño, buscar un bloque específico o una transacción en la cadena lineal de bloques puede volverse ineficiente . Utilizando una tabla hash, se pueden generar claves únicas basadas en ciertos atributos del bloque o la transacción, como su identificador o su hash. Estas claves permiten una búsqueda directa y rápida en la tabla hash, evitando la necesidad de recorrer toda la cadena de bloques insertadas en la lista doblemente enlazadas.
 
 Indexación de transacciones: En el caso de blockchains que almacenan transacciones, una tabla hash puede utilizarse para indexar y acceder rápidamente a transacciones específicas.
 
@@ -263,7 +260,7 @@ Indexación de transacciones: En el caso de blockchains que almacenan transaccio
 **Entre X y Y**
 **vector<Record> range_search(TK begin, TK end)**
  
-Cuando se necesita buscar un rango de valores en una estructura de datos, como en el caso de buscar el monto de transaccion realizado en un intervalo específico, el BST se destaca debido a que mantienen sus elementos ordenados en función en este caso del importe. Esto permite realizar búsquedas eficientes, ya que se puede explorar el árbol de forma ordenada y descartar ramas completas según el rango especificado. Al comparar un monto con otro, se puede determinar si el rango de búsqueda se encuentra en el subárbol izquierdo, el subárbol derecho . Esto permite reducir el espacio de búsqueda en cada paso y, en promedio, acelerar la búsqueda. Para este proceso se tiene una complejidad de O(lgn)
+Cuando se necesita buscar un rango de valores en una estructura de datos, como en el caso de buscar las transacciones realizadas en un intervalo específico, el BST se destaca debido a que mantienen sus elementos ordenados. Esto permite realizar búsquedas eficientes, ya que se puede explorar el árbol de forma ordenada y descartar ramas completas según el rango especificado. Al comparar una fecha con otra, se puede determinar si el rango de búsqueda se encuentra en el subárbol izquierdo, el subárbol derecho . Esto permite reducir el espacio de búsqueda en cada paso y, en promedio, acelerar la búsqueda. Para este proceso se tiene una complejidad de O(lgn)
 
 **Adblock en el BST**
 
