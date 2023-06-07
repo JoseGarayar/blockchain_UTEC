@@ -242,17 +242,26 @@ void displaychain (Blockchain & blockchain, ConsoleWriter writer){
 
 
 void cargarArchivoCSV(Blockchain & blockchain, ConsoleWriter writer){
+    string opcionesCargaArchivo[] = {
+        "1. transactions.csv",
+        "2. transactions2.csv"
+    };
     writer.clearScreen();
-    writer.write(2,10,"OPCION 2 - Generar Blockchain desde archivo .csv");
-    writer.write(5,10,"Presione una tecla para cargar archivo /src/CSV/transactions.csv");
-
-    writer.getchr();
+    // writer.write(2,10,"OPCION 2 - Generar Blockchain desde archivo .csv");
+    char opcionCSV = writer.createMenu("Seleccione una opción para cargar archivo CSV", opcionesCargaArchivo, 2, 5, 10);
+    string file_route = "";
+    if (opcionCSV == '1') {
+        file_route = "src/CSV/transactions.csv";
+    } 
+    if (opcionCSV == '2') {
+        file_route = "src/CSV/transactions2.csv";
+    } 
     
     int nroRegPorBloque= 5;
     blockchain.clear();
 
     CSVManager manager;
-    vector<vector<string>> rows = manager.readFile("src/CSV/transactions.csv");
+    vector<vector<string>> rows = manager.readFile(file_route);
 
     int nrotransenbloque=0;
     std::vector<Transaction> transactions1;
