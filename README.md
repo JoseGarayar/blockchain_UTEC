@@ -343,7 +343,7 @@ Para realizar búsqueda del máximo y mínimo importe transferido se utilizó la
  Como se observa no existe una diferencia marcable entre el blockchain con indices y sin indice y esto es debido al metodo **"cascadeEffect"** el cual sera llamado cada vez que se hace una actualizacion de un bloque o un delete debido a que se requiere generar nuevos hash code y prev hash de los bloques. La razon que se tiene para indexar con estructuras  radica al momento de realizar el proceso de busqueda, utilizando el mejor atributo entre el Hash table, BST, Heap (Max, Min). 
 En la siguiente tabla se muestra la complejidad O ( ) para los siguientes metodos de busqueda
  
-| Método del Blockchain             |  O( )         |
+| Método de busqueda del Blockchain |  O( )         |
 | ----------------------------------| --------------|
 |findTransactionsByFromName         |  O(k)         | 
 |findTransactionsByToName           |  O(k)         | 
