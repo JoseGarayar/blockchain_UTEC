@@ -331,10 +331,6 @@ Para realizar búsqueda del máximo y mínimo importe transferido se utilizó la
 
 ## 6. Análisis de la complejidad en notación Big O de los métodos del Blockchain.
 
-Falta completar
-- Principalmente de los métodos de insertar y buscar
-- Realizar una tabla comparativa de Blockchain con índices vs sin índices.
-
  Se muestra una tabla comparativa de analisis de complejidad de los metodos del Blockchain con indices vs sin indices
   
 | Método del Blockchain | Sin indice O( )|Con indice O( )|
