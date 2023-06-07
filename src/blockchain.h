@@ -178,12 +178,12 @@ public:
 
     // Complejidad O(1)
     Transaction findMaxTransaction() {
-        return maxHeap.extractMax();
+        return maxHeap.peekMax();
     }
 
     // Complejidad O(1)
     Transaction findMinTransaction() {
-        return minHeap.extractMin();
+        return minHeap.peekMin();
     }
 
     vector<Transaction> findTransactionsByRangeof(string dateIni, string dateEnd){

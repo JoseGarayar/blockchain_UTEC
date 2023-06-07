@@ -177,7 +177,7 @@ El metodo "mineBlock()"  que en base a la tecnica Hacash mina un hash_code con 4
         ss << index;
         for (const Transaction& transaction : data) {
             ss << transaction.idTransaccion << transaction.nombreOrigen << transaction.nombreDestino << transaction.importe << transaction.fecha;
-        }
+        }                      
         ss << previousHash << nonce << index;
 
         unsigned char hash[SHA256_DIGEST_LENGTH];
@@ -201,7 +201,7 @@ Dado que se requiere una aplicación transaccional que permita a un usuario regi
 
 ![estructuras de indexacion (2)](https://github.com/JoseGarayar/blockchain_UTEC/assets/134245641/3d6382f3-6145-4a5a-828b-f524738d80c0)
 
-●	Dado los siguientes criterios de búsqueda, para indexar los bloques usaremos la estructura de datos más apropiada de acuerdo al tipo de filtrado requerido:
+Dado los siguientes criterios de búsqueda, para indexar los bloques usaremos la estructura de datos más apropiada de acuerdo al tipo de filtrado requerido:
 1.	Igual a X 
 vector<Record>  search(TK key)
 2.	Entre X y Y 
@@ -213,26 +213,94 @@ Record max_value( )
 5.	Mínimo valor de
 Record min_value( )
 
-
-
 #### **Hash Table**
   
 **Igual a X**
 **vector<Record>  search(TK key)**
-En el blockchain, utilizamos un hash table como estructura de indexación para mejorar la eficiencia de la búsqueda y recuperación de información en la cadena de bloques. Un hash table es una estructura de datos que permite el acceso rápido a los datos almacenados asociándolos con claves únicas.
 
-La razon por la que se utiliza una tabla hash en nuestro blockchain:
-
-Búsqueda eficiente: Conforme el blockchain crece en tamaño, buscar un bloque específico o una transacción en la cadena lineal de bloques puede volverse ineficiente . Utilizando una tabla hash, se pueden generar claves únicas basadas en ciertos atributos del bloque o la transacción, como su identificador o su hash. Estas claves permiten una búsqueda directa y rápida en la tabla hash, evitando la necesidad de recorrer toda la cadena de bloques insertadas en la lista doblemente enlazadas.
+En el blockchain, utilizamos un hash table como estructura de indexación para mejorar la eficiencia de la búsqueda y recuperación de información en la cadena de bloques. Un hash table es una estructura de datos que permite el acceso rápido a los datos almacenados asociándolos con claves únicas. Conforme el blockchain crece en tamaño, buscar un bloque específico o una transacción en la cadena lineal de bloques puede volverse ineficiente . Utilizando una tabla hash, se pueden generar claves únicas basadas en ciertos atributos del bloque o la transacción, como su identificador o su hash. Estas claves permiten una búsqueda directa y rápida en la tabla hash, evitando la necesidad de recorrer toda la cadena de bloques insertadas en la lista doblemente enlazadas.
 
 Indexación de transacciones: En el caso de blockchains que almacenan transacciones, una tabla hash puede utilizarse para indexar y acceder rápidamente a transacciones específicas.
 
+**Adblock en el hash table**
+
+ Cada vez que se agrega un bloque, se indexa el nombre del emisor y receptor en dos tablas hash. Se guarda la informacion del nodo del bloque y del id de transaccion 
+
+ 
+ ![hashtable](https://github.com/JoseGarayar/blockchain_UTEC/assets/134245641/d416630e-b050-4b52-93db-d59aad18cef5)
+
+  Entonces para la busqueda se crean dos metodos: **findTransactionsByFromName** y **findTransactionsByToName**. Que seran busquedas por nombre del emisor y receptor.   
+   
+ ``` js
+    vector<Transaction> findTransactionsByFromName(string name){
+        vector<Transaction> result;
+        forward_list<Pair<int, int>> forwardListFromName = hashTableFromName.find(name);
+        for(auto ele : forwardListFromName) { 
+             result.push_back(blockchain[ele.first]->getData()[ele.second]);
+        }
+        return result;
+    }
+
+    vector<Transaction> findTransactionsByToName(string name){
+        vector<Transaction> result;
+        forward_list<Pair<int, int>> forwardListToName = hashTableToName.find(name);
+        for(auto ele : forwardListToName) { 
+             result.push_back(blockchain[ele.first]->getData()[ele.second]);
+        }
+        return result;
+    }
+```
+ Asi que cada vez que se hace una busqueda, se indexa el emisor y receptor, obteniendo como retorno el bloque y la transaccion donde se encuentra
+ 
+   ![hashtable2](https://github.com/JoseGarayar/blockchain_UTEC/assets/134245641/ff81fec6-a190-40fc-9f83-f643fc1f0b31)
+
+   
+   
 #### **BST (Binary Search Tree)**
 **Entre X y Y**
 **vector<Record> range_search(TK begin, TK end)**
-  
-Falta completar (Indicar para que criterios de busqueda se utiliza)
+ 
+Cuando se necesita buscar un rango de valores en una estructura de datos, como en el caso de buscar las transacciones realizadas en un intervalo específico, el BST se destaca debido a que mantienen sus elementos ordenados. Esto permite realizar búsquedas eficientes, ya que se puede explorar el árbol de forma ordenada y descartar ramas completas según el rango especificado. Al comparar una fecha con otra, se puede determinar si el rango de búsqueda se encuentra en el subárbol izquierdo, el subárbol derecho . Esto permite reducir el espacio de búsqueda en cada paso y, en promedio, acelerar la búsqueda. Para este proceso se tiene una complejidad de O(lgn)
 
+**Adblock en el BST**
+
+ Cada vez que se agrega un bloque, se indexa el nombre del emisor, receptor y la fecha de transaccion  en 3 arboles BST. Dentro de cada nodo del respectivo arbol tambien se guarda el nodo del bloque y el ID de la transaccion.
+  
+   ![BST](https://github.com/JoseGarayar/blockchain_UTEC/assets/134245641/44671280-d15f-4848-a9e0-3baf4c361655)
+
+Entonces para la busqueda se crean dos metodos: **findTransactionsByRangeof** y **findTransactionsByFromNameBeginWith**. Que seran busquedas por rango entre fechas y busqueda por inicial de nombre de emisor
+ 
+``` js
+    vector<Transaction> findTransactionsByRangeof(string dateIni, string dateEnd){
+
+        vector<Transaction> result;
+        vector<pair<string, pair<int, int>>> arr = bstreeDates->findRange(dateIni,dateEnd);
+
+        for(auto ele : arr) { 
+             result.push_back(blockchain[ele.second.first]->getData()[ele.second.second]);
+        }
+
+        return result;
+    } 
+   
+    vector<Transaction> findTransactionsByFromNameBeginWith(string name){
+
+        vector<Transaction> result;        
+        vector<pair<string, pair<int, int>>> arr = bstreeFromName->findKeyBeginWith(name);
+        for(auto ele : arr) { 
+             result.push_back(blockchain[ele.second.first]->getData()[ele.second.second]);
+        }
+
+        return result;
+        
+    }
+```
+ Para el caso de la busqueda por rango de fecha, utilizaremos el atributo de recorrido por anchura del BST en el bstreeDates  , asi al encontrar el rango nos ubicaremos en los bloques y transacciones respectivas de dicho rango.
+   
+   ![BST 2](https://github.com/JoseGarayar/blockchain_UTEC/assets/134245641/5c02ee17-ea60-4d53-abf8-d428556cb4a6)
+
+   
+   
 #### **Heap**
 **Máximo valor de**
 **Record max_value( )**
@@ -241,12 +309,50 @@ Falta completar (Indicar para que criterios de busqueda se utiliza)
   
 Para realizar búsqueda del máximo y mínimo importe transferido se utilizó la estructura de datos `Heap`, `MaxHeap` y `MinHeap` para obtener el máximo y mínimo importe respectivamente con una complejidad de O(1).
 
+ **Adblock en el HEAP**
+
+ Un bloque agregado se indexa toda la informacion de la transaccion en 2 heaps: el MaxHeap y el MinHeap. Ordenados segun su monto 
+   
+   ![HEAP](https://github.com/JoseGarayar/blockchain_UTEC/assets/134245641/58711857-1773-402a-8737-9357cd01e94e)
+
+ Por lo que, para la busqueda del minimo y maximo monto se crean dos metodos: **findMaxTransaction** y **findMinTransaction**. Que seran los nodos raiz de cada heap respectivamente.
+   
+   ``` js
+    Transaction findMaxTransaction() {
+        return maxHeap.peekMax();
+    }
+
+    Transaction findMinTransaction() {
+        return minHeap.peekMin();
+    }
+```
+   
+   ![HEAP 2](https://github.com/JoseGarayar/blockchain_UTEC/assets/134245641/0ef793ea-a623-47a2-9a27-08f591be6ce2)
+
 ## 6. Análisis de la complejidad en notación Big O de los métodos del Blockchain.
 
-Falta completar
-- Principalmente de los métodos de insertar y buscar
-- Realizar una tabla comparativa de Blockchain con índices vs sin índices.
-
+ Se muestra una tabla comparativa de analisis de complejidad de los metodos del Blockchain con indices vs sin indices
+  
+| Método del Blockchain | Sin indice O( )|Con indice O( )|
+| ----------------------| --------------| --------------|
+|addBlock               |  O(1)         | O(lgn)        |
+|deleteBlock            |  O(n)         | O(n)          | 
+|updateDataBlock        |  O(n)         | O(n)     -    |    
+|cascadeEffect          |  O(n)         | O(n)          |     
+ 
+ Como se observa no existe una diferencia marcable entre el blockchain con indices y sin indice y esto es debido al metodo **"cascadeEffect"** el cual sera llamado cada vez que se hace una actualizacion de un bloque o un delete debido a que se requiere generar nuevos hash code y prev hash de los bloques. La razon que se tiene para indexar con estructuras  radica al momento de realizar el proceso de busqueda, utilizando el mejor atributo entre el Hash table, BST, Heap (Max, Min). 
+En la siguiente tabla se muestra la complejidad O ( ) para los siguientes metodos de busqueda
+ 
+| Método de busqueda del Blockchain |  O( )         |
+| ----------------------------------| --------------|
+|findTransactionsByFromName         |  O(k)         | 
+|findTransactionsByToName           |  O(k)         | 
+|findTransactionsByFromNameBeginWith|  O(lgn)       | 
+|findTransactionsByRangeof          |  O(lgn)       |    
+|findMaxTransaction                 |  O(1)         |       
+|findMinTransaction                 |  O(1)         |      
+   
+   
 ## 7. Conclusiones
 
 La implementación de un blockchain con indexación eficiente para transacciones financieras tiene el potencial de mejorar significativamente la forma en que se almacena y se busca información en este contexto. Al estructurar los datos y utilizar algoritmos de indexación optimizados, se espera lograr una mayor eficiencia en la recuperación de información, lo que puede beneficiar a diversos actores en el sector financiero. Sin embargo, es importante destacar que el éxito del proyecto dependerá de la implementación adecuada de las técnicas de seguridad y la selección correcta de los algoritmos de indexación para garantizar la integridad y la confiabilidad de los datos almacenados en el blockchain.
@@ -295,3 +401,4 @@ Carlos Villanueva
 - Usar estructura de datos "Hash Table" para indexación de criterio de búsqueda "Igual a X", esto se actualiza al agregar, actualizar o eliminar bloque.
 - Agregar información de las estructuras de datos al informe.
 - Elaborar presentación PowerPoint del proyecto.
+- Elaboracion de informe final en el archivo README del proyecto
