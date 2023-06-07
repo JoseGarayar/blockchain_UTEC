@@ -59,6 +59,14 @@ public:
         heapifyUp(heapSize - 1);
     }
 
+    Transactions peekMax() {
+        if (isEmpty())
+            throw out_of_range("MaxHeap is empty");
+
+        Transactions maxItem = heapArray[0];
+        return maxItem;
+    }
+
     Transactions extractMax() {
         if (isEmpty())
             throw out_of_range("MaxHeap is empty");
@@ -135,6 +143,14 @@ public:
         heapArray.push_back(item); // O(1)
         heapSize++;
         heapifyUp(heapSize - 1); // O(log n)
+    }
+
+    Transactions peekMin() {
+        if (isEmpty())
+            throw out_of_range("MaxHeap is empty");
+
+        Transactions minItem = heapArray[0];
+        return minItem;
     }
 
     Transactions extractMin() {
