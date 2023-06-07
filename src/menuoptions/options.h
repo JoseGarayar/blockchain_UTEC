@@ -244,17 +244,21 @@ void displaychain (Blockchain & blockchain, ConsoleWriter writer){
 void cargarArchivoCSV(Blockchain & blockchain, ConsoleWriter writer){
     string opcionesCargaArchivo[] = {
         "1. transactions.csv",
-        "2. transactions2.csv"
+        "2. transactions2.csv",
+        "3. Regresar al menu principal"
     };
     writer.clearScreen();
     // writer.write(2,10,"OPCION 2 - Generar Blockchain desde archivo .csv");
-    char opcionCSV = writer.createMenu("Seleccione una opción para cargar archivo CSV", opcionesCargaArchivo, 2, 5, 10);
+    char opcionCSV = writer.createMenu("Seleccione una opción para cargar archivo CSV", opcionesCargaArchivo, 3, 5, 10);
     string file_route = "";
     if (opcionCSV == '1') {
         file_route = "src/CSV/transactions.csv";
     } 
     if (opcionCSV == '2') {
         file_route = "src/CSV/transactions2.csv";
+    } 
+    if (opcionCSV == '3') {
+        return;
     } 
     
     int nroRegPorBloque= 5;
