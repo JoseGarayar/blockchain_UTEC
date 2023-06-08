@@ -32,11 +32,14 @@ En el contexto de un blockchain, cada bloque de transacciones se puede represent
 
 Aquí hay una representación visual de la estructura de la lista circular doblemente enlazada en un blockchain:
 
-   ![Blockchain](https://github.com/JoseGarayar/blockchain_UTEC/assets/134245641/effbf741-d878-4261-8512-07dd982963b8)
+![blockhchain actual](https://github.com/JoseGarayar/blockchain_UTEC/assets/134245641/0be076fc-3f3b-44fa-ae4a-7eddbf48c351)
+
 
 La informacion de la transaccion estara constituido por el ID de la transaccion, Emisor, Receptor, Importe y Fecha. Se pueden realizar distintas transacciones y almacenarlas en un bloque utilizando la clase desarrollado "Block"; para luego ser estructurado en lista circular doblemente enlazada a travez del metodo "addBlock" de la clase Blockchain creada.  .
 
-![INTRODEDATOS](https://github.com/JoseGarayar/blockchain_UTEC/assets/134245641/19fd0bdc-ecd5-42e5-845d-8785587ee00b)
+
+![INTRODEDATOS](https://github.com/JoseGarayar/blockchain_UTEC/assets/134245641/90ccd09f-6a52-4f7e-9c7c-cf50582ff790)
+
 
 La Clase block como se observa no solo contiene la transaccion efectuada, tambien lo que es el indice de la lista circular doblemente enlazada en la que se va a ubicar, el previousHash, el nonce y el hash . 
 
@@ -112,17 +115,20 @@ Se mostraran el efecto cascada en la siguientes imagenes
 
 **Blockchain Inicial**
 
-![blockhchain actual](https://github.com/JoseGarayar/blockchain_UTEC/assets/134245641/432819bf-e825-4d24-8bf9-83027426d8dd)
+![blockhchain actual](https://github.com/JoseGarayar/blockchain_UTEC/assets/134245641/b60811c6-6ca8-40bd-8d65-fe475a2e7cfd)
+
 
 
 **Blockchain Con Transaccion Modificada**
 
-![blockhchain modificado](https://github.com/JoseGarayar/blockchain_UTEC/assets/134245641/c890277e-b052-443d-8a05-6273baaa2ff6)
+
+![blockhchain modificado](https://github.com/JoseGarayar/blockchain_UTEC/assets/134245641/fbaebe7f-6fe0-49d3-99ca-828da370dee9)
 
 
 **Blockchain Con Bloque Eliminado**
 
-![blockhchain eliminado](https://github.com/JoseGarayar/blockchain_UTEC/assets/134245641/828afd82-1956-4f6c-be28-6317eb0dfd3f)
+![blockhchain eliminado](https://github.com/JoseGarayar/blockchain_UTEC/assets/134245641/52279363-99f2-432d-a68b-00c6105e05fc)
+
 
 ### - Prueba de trabajo
 
@@ -199,7 +205,8 @@ El metodo "mineBlock()"  que en base a la tecnica Hacash mina un hash_code con 4
 
 Dado que se requiere una aplicación transaccional que permita a un usuario registrar transacciones bancarias de manera segura en el Blockchain, para luego aplicar búsquedas eficientes usando diversas estructuras de datos como mecanismos de indexación para diferentes criterios de búsqueda. Utilizaremos para nuestra aplicacion las estructuras Hash **table**, **Arbol binario BST** , y **Heap**
 
-![estructuras de indexacion (2)](https://github.com/JoseGarayar/blockchain_UTEC/assets/134245641/3d6382f3-6145-4a5a-828b-f524738d80c0)
+![estructuras de indexacion](https://github.com/JoseGarayar/blockchain_UTEC/assets/134245641/f5c74e5d-ac7a-438f-8beb-a27d0e6e0921)
+
 
 Dado los siguientes criterios de búsqueda, para indexar los bloques usaremos la estructura de datos más apropiada de acuerdo al tipo de filtrado requerido:
 1.	Igual a X 
@@ -226,8 +233,8 @@ Indexación de transacciones: En el caso de blockchains que almacenan transaccio
 
  Cada vez que se agrega un bloque, se indexa el nombre del emisor y receptor en dos tablas hash. Se guarda la informacion del nodo del bloque y del id de transaccion 
 
- 
- ![hashtable](https://github.com/JoseGarayar/blockchain_UTEC/assets/134245641/d416630e-b050-4b52-93db-d59aad18cef5)
+ ![hashtable](https://github.com/JoseGarayar/blockchain_UTEC/assets/134245641/e5db1dae-1e3b-418f-806a-e05a5cb8d597)
+
 
   Entonces para la busqueda se crean dos metodos: **findTransactionsByFromName** y **findTransactionsByToName**. Que seran busquedas por nombre del emisor y receptor.   
    
@@ -252,7 +259,7 @@ Indexación de transacciones: En el caso de blockchains que almacenan transaccio
 ```
  Asi que cada vez que se hace una busqueda, se indexa el emisor y receptor, obteniendo como retorno el bloque y la transaccion donde se encuentra
  
-   ![hashtable2](https://github.com/JoseGarayar/blockchain_UTEC/assets/134245641/ff81fec6-a190-40fc-9f83-f643fc1f0b31)
+![hashtable2](https://github.com/JoseGarayar/blockchain_UTEC/assets/134245641/d9e263dd-a7e5-4e24-a109-950739a91995)
 
    
    
@@ -266,7 +273,8 @@ Cuando se necesita buscar un rango de valores en una estructura de datos, como e
 
  Cada vez que se agrega un bloque, se indexa el nombre del emisor, receptor y la fecha de transaccion  en 3 arboles BST. Dentro de cada nodo del respectivo arbol tambien se guarda el nodo del bloque y el ID de la transaccion.
   
-   ![BST](https://github.com/JoseGarayar/blockchain_UTEC/assets/134245641/44671280-d15f-4848-a9e0-3baf4c361655)
+   ![BST](https://github.com/JoseGarayar/blockchain_UTEC/assets/134245641/39f874ad-9ea1-4b58-a263-7c1fc7cd03a4)
+
 
 Entonces para la busqueda se crean dos metodos: **findTransactionsByRangeof** y **findTransactionsByFromNameBeginWith**. Que seran busquedas por rango entre fechas y busqueda por inicial de nombre de emisor
  
@@ -297,7 +305,7 @@ Entonces para la busqueda se crean dos metodos: **findTransactionsByRangeof** y 
 ```
  Para el caso de la busqueda por rango de fecha, utilizaremos el atributo de recorrido por anchura del BST en el bstreeDates  , asi al encontrar el rango nos ubicaremos en los bloques y transacciones respectivas de dicho rango.
    
-   ![BST 2](https://github.com/JoseGarayar/blockchain_UTEC/assets/134245641/5c02ee17-ea60-4d53-abf8-d428556cb4a6)
+![BST 2](https://github.com/JoseGarayar/blockchain_UTEC/assets/134245641/16bb1639-14f3-4d2c-9708-37b8c7209bc0)
 
    
    
@@ -312,8 +320,9 @@ Para realizar búsqueda del máximo y mínimo importe transferido se utilizó la
  **Adblock en el HEAP**
 
  Un bloque agregado se indexa toda la informacion de la transaccion en 2 heaps: el MaxHeap y el MinHeap. Ordenados segun su monto 
-   
-   ![HEAP](https://github.com/JoseGarayar/blockchain_UTEC/assets/134245641/58711857-1773-402a-8737-9357cd01e94e)
+ 
+   ![HEAP](https://github.com/JoseGarayar/blockchain_UTEC/assets/134245641/1e7f64e8-a397-4020-b422-4558400b72d8)
+
 
  Por lo que, para la busqueda del minimo y maximo monto se crean dos metodos: **findMaxTransaction** y **findMinTransaction**. Que seran los nodos raiz de cada heap respectivamente.
    
@@ -326,8 +335,9 @@ Para realizar búsqueda del máximo y mínimo importe transferido se utilizó la
         return minHeap.peekMin();
     }
 ```
-   
-   ![HEAP 2](https://github.com/JoseGarayar/blockchain_UTEC/assets/134245641/0ef793ea-a623-47a2-9a27-08f591be6ce2)
+ 
+   ![HEAP 2](https://github.com/JoseGarayar/blockchain_UTEC/assets/134245641/13032e7f-855a-4a39-b0ea-ae90cb99d6cc)
+
 
 ## 6. Análisis de la complejidad en notación Big O de los métodos del Blockchain.
 
