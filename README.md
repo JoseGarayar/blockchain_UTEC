@@ -359,8 +359,12 @@ La implementación de un blockchain con indexación eficiente para transacciones
 
 ## 8. Referencias bibliográficas 
 
-Falta completar
 
+- Adam Drozdek (2013) Data Structures and Algorithms in C++,  Fourth Edition
+   
+- Mark Allen Weiss (2014) Data Structures and Algorithm Analysis in C++
+
+   
 ## 9. Anexar al informe la lista de actividades concluidas por cada integrante del grupo
 
 Jose Garayar
