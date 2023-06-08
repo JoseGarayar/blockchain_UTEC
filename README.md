@@ -1,5 +1,33 @@
 # PROYECTO 1 - BLOCKCHAIN INDEXING
 
+## 0. Instrucciones para correr el proyecto en Ubuntu
+
+Instalar compilador g++
+```
+sudo apt-get update
+sudo apt-get install build-essential
+```
+
+Instalar libreria para #include <openssl/sha.h>
+```
+sudo apt-get update
+sudo apt-get install libssl-dev
+```
+
+Instalar para libreria ncurses
+```
+sudo apt-get update
+sudo apt-get install libncurses5-dev libncursesw5-dev
+```
+
+Como compilar
+
+```g++ -o main main.cpp -lcrypto -lssl -lncurses```
+
+Se genera el ejecutable main, para ejecutar
+
+```./main```
+
 ## 1. Introducción
 
 Este proyecto del curso de estructura de datos - maestría UTEC 2023 consiste en desarrollar una aplicación transaccional de almacenamiento seguro de datos, en donde los datos serán almacenados en una cadena de bloques codificados (Blockchains en un solo host), y permitirá búsquedas eficientes, los registros serán indexados con diferentes estructuras de datos desarrollados por los miembros del grupo.
@@ -385,9 +413,10 @@ Jose Garayar
 - Implementar función eliminar bloque y actualizar data del bloque para menú del blockchain.
 - Implementar estructura de datos "Hash Table".
 - Usar estructura de datos "Hash Table" para indexación de criterio de búsqueda "Igual a X", esto se actualiza al agregar, actualizar o eliminar bloque.
+- Agregar opciones al menú de consola.
 - Crear estructura de informe final en el archivo README del proyecto
 - Crear tareas para cada miembro del grupo en [Board de Github Project](https://github.com/users/JoseGarayar/projects/1/views/1?layout=board).
-![github_project_board](https://github.com/JoseGarayar/blockchain_UTEC/assets/53947785/398348b6-91e1-4aab-b1e7-d9560d224b9d)
+![github_project_board](https://github.com/JoseGarayar/blockchain_UTEC/assets/53947785/1d70733c-ea90-488a-8b44-30bb65464020)
 
 Roberth Ramos
 
@@ -416,3 +445,11 @@ Carlos Villanueva
 - Agregar información de las estructuras de datos al informe.
 - Elaborar presentación PowerPoint del proyecto.
 - Elaboracion de informe final en el archivo README del proyecto
+
+## 10. Posibles mejoras futuras para proyecto
+    
+- Mejora método de recálculo de cascada para empezar desde nodo con hash inválido.
+- Agregar validación de datos de transacciones al insertar o actualizar bloque.
+- Cambiar color de bloques con hash inválido al mostrar blockchain en menú de consola.
+- Agregar un mejorado menú interactivo, puede ser con javascript.
+
