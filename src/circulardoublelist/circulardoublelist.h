@@ -10,7 +10,7 @@ class CircularDoubleList{
    
 private:
     NodeCircularDouble<T>* head;
-    NodeCircularDouble<T>* tail;
+    //NodeCircularDouble<T>* tail;
     int nodes;
 
 public:
